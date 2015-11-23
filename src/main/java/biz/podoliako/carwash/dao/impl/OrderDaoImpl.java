@@ -796,4 +796,48 @@ public class OrderDaoImpl implements OrderDao{
         }
 
     }
+
+    @Override
+    public Integer getQuantityCurrentOrdersInCarWash(Integer carWashId) {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        Integer count = 0;
+
+        try {
+            connection = connectionDB.getConnection();
+
+            String query = "SELECT * FROM " + ORDER_TABLE +
+                    " WHERE car_wash_id = ? " +
+                    " AND date_of_close IS NULL " +
+                    " AND date_of_delete IS NULL ";
+
+            ps = connection.prepareStatement(query);
+
+            ps.setInt(1, carWashId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()){
+                count++;
+            }
+
+            return count;
+        } catch (SQLException e) {
+            throw new SQLRuntimeException("SQL exception в методе deleteWasherManInOrder (OrderDaoImpl) " + e);
+        } catch (NamingException e) {
+            throw new NamingRuntimeException("Naming exception в методе deleteWasherManInOrder (OrderDaoImpl) " + e);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+
+                if (connection != null) {
+                    connection.close();
+                }
+            }catch (SQLException e) {
+                throw new SQLRuntimeException("SQL exception,  Cannot close connection or PreparedStatement, в методе deleteWasherManInOrder (OrderDaoImpl) " + e);
+            }
+        }
+    }
 }

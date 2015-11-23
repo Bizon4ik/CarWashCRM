@@ -14,16 +14,16 @@ public interface CarWashDao {
     public final static String CAR_WASH_TABLE = "car_wash";
 
 
-    public void addCarWash(CarWash carWash) throws SQLException;
+    public void addCarWash(CarWash carWash);
 
-    public void deleteCarWash(Integer carWashId) throws SQLException;
+    public void deleteCarWash(Integer carWashId);
 
     public void modifyCarWash();
 
-    public boolean isCarWashNameExist(String name) throws SQLException;
+    public boolean isCarWashNameExist(String name);
 
     public CarWash selectCarWash(Integer id);
 
-    public List<CarWash> selectAllCarWash(Integer ownerId) throws SQLException;
+    public List<CarWash> selectAllCarWash(Integer ownerId);
 
 }

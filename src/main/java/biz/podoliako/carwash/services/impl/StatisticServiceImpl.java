@@ -6,13 +6,16 @@ import biz.podoliako.carwash.models.entity.CarWash;
 import biz.podoliako.carwash.services.StatisticService;
 import biz.podoliako.carwash.view.GeneralStatInBox;
 import biz.podoliako.carwash.view.GeneralStatInCarWash;
+import biz.podoliako.carwash.view.owner.statistic.StatisticForAdminMainPage;
 import biz.podoliako.carwash.view.statistic.OrderForDetailStatisticInBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service("StatisticService")
 public class StatisticServiceImpl implements StatisticService{
@@ -61,6 +64,28 @@ public class StatisticServiceImpl implements StatisticService{
 
         return daoFactory.getStatisticDao().selectDetailStatisticForBox(washId, boxNumber, from, to);
 
+    }
+
+    @Override
+    public Map<CarWash, StatisticForAdminMainPage> getStatisticForAdminMainPage(Integer ownerId) {
+        Map<CarWash, StatisticForAdminMainPage> statistic = new LinkedHashMap();
+        List<CarWash> carWashList = daoFactory.getCarWashDao().selectAllCarWash(ownerId);
+        for(CarWash carWash:carWashList) {
+            StatisticForAdminMainPage carWashStatistic = adminMainPageCarWashStatistic(carWash);
+            statistic.put(carWash, carWashStatistic);
+
+        }
+        return statistic;
+    }
+
+    private StatisticForAdminMainPage adminMainPageCarWashStatistic(CarWash carWash) {
+        StatisticForAdminMainPage statistic = new StatisticForAdminMainPage();
+        statistic.setCarWashId(carWash.getId());
+
+        Integer quantityCurrentOrders = daoFactory.getOrderDao().getQuantityCurrentOrdersInCarWash(carWash.getId());
+        statistic.setQuantityCurrentOrders(quantityCurrentOrders);
+
+        return statistic;
     }
 
 

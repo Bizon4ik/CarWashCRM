@@ -4,7 +4,16 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<jsp:include page="../admin_header.jsp" />
+<c:choose>
+    <c:when test="${carWashId == null}">
+        <c:set var="url" value="/admin"/>
+        <jsp:include page="../admin_header.jsp" />
+    </c:when>
+    <c:otherwise>
+        <c:set var="url" value="/owner"/>
+        <jsp:include page="../../owner/owner_header.jsp" />
+    </c:otherwise>
+</c:choose>
 
 <div class="container-fluid" id="body">
 
@@ -36,7 +45,7 @@
 
             <c:forEach items="${generalStatInCarWash.generalStatInBoxes}" var="box" varStatus="loop">
               <tr>
-                <td class="col-xs-1"><a href="/admin/statistic/detailStatForBox/${loop.count}/${generalStatInCarWash.from.time}/${generalStatInCarWash.to.time}">Бокс-${loop.count}</a></td>
+                <td class="col-xs-1"><a href="${url}/statistic/detailStatForBox/${carWashId}${loop.count}/${generalStatInCarWash.from.time}/${generalStatInCarWash.to.time}">Бокс-${loop.count}</a></td>
                 <td class="col-xs-4">${box.orderAmount} </td>
                   <c:choose>
                       <c:when test="${box.moneyInCash != null}">

@@ -1,4 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:include page="owner_header.jsp" />
 
 
@@ -20,17 +24,13 @@
       </thead>
       <tbody>
         <tr>
-          <th><a href="#">Чапаевка</a></th>
-          <th>3</th>
-        </tr>
-        <tr>
-          <th><a href="#">Петровка</a></th>
-          <th>2</th>
-        </tr>
-        <tr>
-          <th><a href="#">Дарница</a></th>
-          <th>Машин нет</th>
-        </tr>
+          <c:forEach items="${adminMainPage.carWashesStatistic}" var="statistic" varStatus="loop">
+            <tr>
+                <th><a href="/owner/currentOrders/${statistic.key.id}">${statistic.key.name}</a></th>
+                <th>${statistic.value.quantityCurrentOrders}</th>
+            </tr>
+          </c:forEach>
+
       </tbody>
     </table>
 

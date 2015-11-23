@@ -46,4 +46,6 @@ public interface OrderDao {
     Boolean isItDayOrder(Integer id);
 
     void deleteWasherManInOrder(Integer orderId);
+
+    Integer getQuantityCurrentOrdersInCarWash(Integer carWashId);
 }

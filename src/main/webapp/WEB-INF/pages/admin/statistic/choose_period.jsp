@@ -3,7 +3,17 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<jsp:include page="../admin_header.jsp" />
+<c:choose>
+  <c:when test="${carWashList == null}">
+    <c:set var="url" value="/admin"/>
+    <jsp:include page="../admin_header.jsp" />
+  </c:when>
+  <c:otherwise>
+    <c:set var="url" value="/owner"/>
+    <jsp:include page="../../owner/owner_header.jsp" />
+  </c:otherwise>
+</c:choose>
+
 
 <div class="container-fluid" id="body">
 
@@ -17,7 +27,7 @@
   <div class="row">
     <div class="col-xs-12 col-md-10 col-md-offset-1" >
 
-      <form:form method="post" action="/admin/statistic/period" cssClass="form-horizontal" commandName="calendarPeriod">
+      <form:form method="post" action="${url}/statistic/period" cssClass="form-horizontal" commandName="calendarPeriod">
         <div class="form-group">
           <label for="fromDate" class="col-xs-2 control-label">От</label>
           <div class="col-xs-3">
@@ -95,6 +105,21 @@
           </div>
 
         </div>
+
+        <c:if test="${carWashList != null}" >
+          <div class="form-group">
+            <label for="carWashList" class="col-xs-2 control-label">Мойка:</label>
+            <div class="col-xs-5">
+              <form:select size="1"  multiple="false" path="carWashId" id="carWashList" cssClass="form-control " itemLabel="${calendarPeriod.carWashId}">
+                <c:forEach items="${carWashList}" var="carWash">
+                  <option value="${carWash.id}">${carWash.name}</option>
+                </c:forEach>
+              </form:select>
+            </div>
+
+            </div>
+          </div>
+        </c:if>
 
         <button type="submit" class="btn btn-primary col-xs-offset-2 col-xs-3">Ввести</button>
 

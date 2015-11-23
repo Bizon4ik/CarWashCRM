@@ -4,7 +4,17 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<jsp:include page="../admin_header.jsp" />
+<c:choose>
+  <c:when test="${isOwner == null}">
+    <c:set var="url" value="/admin"/>
+    <jsp:include page="../admin_header.jsp" />
+  </c:when>
+  <c:otherwise>
+    <c:set var="url" value="/owner"/>
+    <jsp:include page="../../owner/owner_header.jsp" />
+  </c:otherwise>
+</c:choose>
+
 
 <div class="container-fluid" id="body">
 

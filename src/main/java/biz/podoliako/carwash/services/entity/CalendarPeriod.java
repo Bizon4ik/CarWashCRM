@@ -19,6 +19,9 @@ public class CalendarPeriod {
     @NotNull
     Integer fromMinute;
 
+    @NotNull
+    private Integer carWashId;
+
 
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     @NotNull(message = "Поле не может быть пустым")
@@ -78,12 +81,21 @@ public class CalendarPeriod {
         this.toMinute = toMinute;
     }
 
+    public Integer getCarWashId() {
+        return carWashId;
+    }
+
+    public void setCarWashId(Integer carWashId) {
+        this.carWashId = carWashId;
+    }
+
     @Override
     public String toString() {
         return "CalendarPeriod{" +
                 "fromDate=" + fromDate +
                 ", fromHour=" + fromHour +
                 ", fromMinute=" + fromMinute +
+                ", carWashId=" + carWashId +
                 ", toDate=" + toDate +
                 ", toHour=" + toHour +
                 ", toMinute=" + toMinute +
