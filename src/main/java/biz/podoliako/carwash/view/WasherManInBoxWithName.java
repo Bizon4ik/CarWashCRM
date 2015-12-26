@@ -25,6 +25,8 @@ public class WasherManInBoxWithName extends WasherManInBox {
     @Override
     public String toString() {
         return "WasherManInBoxWithName{" +
+                "id='" + super.getId()+ '\'' +
+                "userId='" + super.getUserId()+ '\'' +
                 "name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 '}';

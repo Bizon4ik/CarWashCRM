@@ -21,6 +21,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -142,8 +144,13 @@ public class OrderController {
             model.addAttribute("globalError", e.getMessage());
             return "admin/main";
         } catch (Throwable e) {
-            redirectAttributes.addFlashAttribute("globalError", e.getMessage());
-            return "redirect:admin/main";
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            String s = sw.toString();
+
+            redirectAttributes.addFlashAttribute("globalError", "message = " + e.getMessage() + " \n " +  s);
+            return "redirect:/admin/main";
         }
 
         return "redirect:/admin/main";

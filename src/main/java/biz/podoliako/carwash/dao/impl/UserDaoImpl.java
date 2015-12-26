@@ -411,7 +411,7 @@ public class UserDaoImpl implements UserDao {
 
             String query = "SELECT DISTINCT " +
                                     "w.id as id, " +
-                                    "w.user_id as user_id, " +
+                                    "u.id as user_id, " +
                                     "w.car_wash_id as car_wash_id, " +
                                     "w.box_number as box_number, " +
                                     "w.start as start, " +
@@ -474,6 +474,10 @@ public class UserDaoImpl implements UserDao {
                 throw new SQLRuntimeException("SQL exception, Cannot close connection or PreparedStatement in selectAvailableAndCurrentWasherManInBox (UserDaoImpl) " + e);
             }
 
+        }
+
+        for (WasherManInBoxWithName w : washerManInBoxWithNameSet) {
+            System.out.println("washerMan = " + w);
         }
 
         return washerManInBoxWithNameSet;

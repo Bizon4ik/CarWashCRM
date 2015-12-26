@@ -19,7 +19,7 @@ public class CalendarPeriod {
     @NotNull
     Integer fromMinute;
 
-    @NotNull
+
     private Integer carWashId;
 
 
