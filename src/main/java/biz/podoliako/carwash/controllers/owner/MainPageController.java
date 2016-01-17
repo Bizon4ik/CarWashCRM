@@ -1,10 +1,9 @@
 package biz.podoliako.carwash.controllers.owner;
 
-import biz.podoliako.carwash.models.entity.User;
+import biz.podoliako.carwash.models.pojo.UserExt;
 import biz.podoliako.carwash.services.OrderService;
 import biz.podoliako.carwash.services.StatisticService;
 import biz.podoliako.carwash.view.OrderInBox;
-import biz.podoliako.carwash.view.OrderedService;
 import biz.podoliako.carwash.view.owner.AdminMainPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,9 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
-import javax.naming.NamingException;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -33,18 +30,21 @@ public class MainPageController {
                        Model model){
 
         try {
-          User user = (User) session.getAttribute("CurrentCarWashUser");
+
+          UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
 
           AdminMainPage adminMainPage =  new AdminMainPage();
-          adminMainPage.setCarWashesStatistic(statisticService.getStatisticForAdminMainPage(user.getOwnerId()));
+          adminMainPage.setCarWashesStatistic(statisticService.getStatisticForAdminMainPage(userExt.getOwnerId()));
 
           model.addAttribute("adminMainPage", adminMainPage);
 
+          return "owner/main";
         }catch (Exception e){
             System.out.println("Ooops... exception:" + e.getStackTrace());
+            throw new RuntimeException(e.getStackTrace().toString());
         }
 
-        return "owner/main";
+
     }
 
     @RequestMapping(value = "/currentOrders/{carWashId}", method = RequestMethod.GET)

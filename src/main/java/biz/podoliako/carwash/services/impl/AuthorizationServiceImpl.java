@@ -2,12 +2,11 @@ package biz.podoliako.carwash.services.impl;
 
 import biz.podoliako.carwash.dao.DaoFactory;
 import biz.podoliako.carwash.services.AuthorizationService;
-import biz.podoliako.carwash.models.entity.User;
-import biz.podoliako.carwash.services.MD5;
+import biz.podoliako.carwash.models.pojo.UserExt;
+import biz.podoliako.carwash.services.utils.MD5;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 
@@ -22,20 +21,20 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     private MD5 md5;
 
     @Override
-    public User getUser(String login, String password) throws SQLException {
+    public UserExt getUser(String login, String password) throws SQLException {
         password = MD5.hashing(password);
         Integer userId = daoFactory.getUserDao().getUserIdByLogPass(login, password);
 
-        User user;
+        UserExt userExt;
 
         if (userId == null) {
-            user = null;
+            userExt = null;
         }else {
-            user = daoFactory.getUserDao().getUserbyId(userId);
-            user.setCarWashPermissionSet(daoFactory.getUserDao().getUserPermission(userId));
+            userExt = daoFactory.getUserDao().getUserbyId(userId);
+            userExt.setCarWashPermissionSet(daoFactory.getUserDao().getUserPermission(userId));
         }
 
-        return user;
+        return userExt;
     }
 
     @Override
@@ -65,8 +64,8 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     }
 
     @Override
-    public void setUserSession(User user, HttpSession session) {
-        session.setAttribute("CurrentCarWashUser", user);
+    public void setUserSession(UserExt userExt, HttpSession session) {
+        session.setAttribute("CurrentCarWashUser", userExt);
     }
 
     @Override

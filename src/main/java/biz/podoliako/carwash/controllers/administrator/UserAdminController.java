@@ -1,8 +1,7 @@
 package biz.podoliako.carwash.controllers.administrator;
 
-import biz.podoliako.carwash.models.entity.CarWash;
 import biz.podoliako.carwash.models.entity.Role;
-import biz.podoliako.carwash.models.entity.User;
+import biz.podoliako.carwash.models.pojo.UserExt;
 import biz.podoliako.carwash.services.UserService;
 import biz.podoliako.carwash.services.entity.AddUserForm;
 import biz.podoliako.carwash.view.AddUserFormView;
@@ -18,8 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Controller
@@ -33,9 +30,9 @@ public class UserAdminController {
     public String addWasherManGet (HttpSession session,
                                    Model model){
 
-        User user = (User) session.getAttribute("CurrentCarWashUser");
+        UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
         try {
-            AddUserFormView addAdminForm = userService.getAddWasherManForm(user.getOwnerId());
+            AddUserFormView addAdminForm = userService.getAddWasherManForm(userExt.getOwnerId());
             model.addAttribute("addUserFormView", addAdminForm);
         }catch (SQLException e) {
             model.addAttribute("globalError", e.getMessage());
@@ -53,20 +50,20 @@ public class UserAdminController {
                                    HttpSession session,
                                    RedirectAttributes redirectAttributes,
                                    Model model) {
-        User user = (User) session.getAttribute("CurrentCarWashUser");
+        UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
 
-        addUserForm.setOwnerId(user.getOwnerId());
+        addUserForm.setOwnerId(userExt.getOwnerId());
         model.addAttribute("addUserForm", addUserForm);
 
         try {
             if (bindResult.hasErrors()) {
-                AddUserFormView addAdminForm = userService.getAddWasherManForm(user.getOwnerId());
+                AddUserFormView addAdminForm = userService.getAddWasherManForm(userExt.getOwnerId());
                 model.addAttribute("addUserFormView", addAdminForm);
 
                 return "admin/user/addUser";
             }
             addUserForm.setRole(Role.washerMan);
-            addUserForm.setCreatedBy(user.getId());
+            addUserForm.setCreatedBy(userExt.getId());
             userService.addUser(addUserForm);
 
             redirectAttributes.addFlashAttribute("globalMsg", "Мойщик " + addUserForm.getName() + " успешно создан");
@@ -83,13 +80,13 @@ public class UserAdminController {
     public String allUsersGet (HttpSession session,
                                Model model){
 
-        User user = (User) session.getAttribute("CurrentCarWashUser");
+        UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
         Integer carWashId = (Integer) session.getAttribute("ChoosenCarWashId");
 
         try {
-            Set<User> userSet = userService.getAllWasherManInCarWash(carWashId);
+            Set<UserExt> userExtSet = userService.getAllWasherManInCarWash(carWashId);
 
-            model.addAttribute("userSet", userSet);
+            model.addAttribute("userSet", userExtSet);
         }catch (Exception e) {
             model.addAttribute("globalError", e.getMessage());
         }

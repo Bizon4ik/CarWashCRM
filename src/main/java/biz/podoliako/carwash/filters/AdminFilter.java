@@ -1,7 +1,7 @@
 package biz.podoliako.carwash.filters;
 
 import biz.podoliako.carwash.models.entity.Role;
-import biz.podoliako.carwash.models.entity.User;
+import biz.podoliako.carwash.models.pojo.UserExt;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -22,9 +22,9 @@ public class AdminFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpSession session = req.getSession();
 
-        User user = (User) session.getAttribute("CurrentCarWashUser");
+        UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
 
-        if (user.getRole() != Role.administrator) {
+        if (userExt.getRole() != Role.administrator) {
             RequestDispatcher requestDispatcher = req.getRequestDispatcher("/login");
             requestDispatcher.forward(req, response);
         }else {

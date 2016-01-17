@@ -2,11 +2,9 @@ package biz.podoliako.carwash.controllers.owner;
 
 import biz.podoliako.carwash.models.entity.Category;
 import biz.podoliako.carwash.services.CategoryService;
-import biz.podoliako.carwash.models.entity.User;
+import biz.podoliako.carwash.models.pojo.UserExt;
 import biz.podoliako.carwash.models.pojo.CategoryFormErrors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +27,7 @@ public class CarCategoryController{
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String addPost(@ModelAttribute("category") Category category,
-                          @ModelAttribute("CurrentCarWashUser") User authorization,
+                          @ModelAttribute("CurrentCarWashUser") UserExt authorization,
                           Model model ) {
         try {
             category.setOwnerId(authorization.getOwnerId());
@@ -53,7 +51,7 @@ public class CarCategoryController{
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public String allGet (@ModelAttribute("CurrentCarWashUser") User authorization,
+    public String allGet (@ModelAttribute("CurrentCarWashUser") UserExt authorization,
                           Model model ) {
 
         try {
@@ -68,7 +66,7 @@ public class CarCategoryController{
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public String deleteGet(@ModelAttribute("CurrentCarWashUser") User authorization,
+    public String deleteGet(@ModelAttribute("CurrentCarWashUser") UserExt authorization,
                             Model model)throws SQLException {
 
         model.addAttribute("delete", new Boolean(true));
@@ -81,7 +79,7 @@ public class CarCategoryController{
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public String deletePost(@RequestParam(value = "listIdCategory", defaultValue = "") String[] listIdCategory,
-                             @ModelAttribute("CurrentCarWashUser") User authorization,
+                             @ModelAttribute("CurrentCarWashUser") UserExt authorization,
                              Model model) {
 
         try {

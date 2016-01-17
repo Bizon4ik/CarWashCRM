@@ -1,6 +1,6 @@
 package biz.podoliako.carwash.controllers.administrator;
 
-import biz.podoliako.carwash.models.entity.User;
+import biz.podoliako.carwash.models.pojo.UserExt;
 import biz.podoliako.carwash.models.entity.WasherManInBox;
 import biz.podoliako.carwash.services.UserService;
 import biz.podoliako.carwash.view.WasherManInBoxWithName;
@@ -13,7 +13,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -89,9 +88,9 @@ public class GangsController {
         try {
             Integer boxNum = Integer.valueOf(boxNumber);
             Integer carWashId = (Integer) session.getAttribute("ChoosenCarWashId");
-            User currentUserId = (User) session.getAttribute("CurrentCarWashUser");
+            UserExt currentUserExtId = (UserExt) session.getAttribute("CurrentCarWashUser");
 
-            userService.modifyWasherManTeamInBox(carWashId, boxNum, washerManIds, currentUserId.getId());
+            userService.modifyWasherManTeamInBox(carWashId, boxNum, washerManIds, currentUserExtId.getId());
             redirectAttributes.addFlashAttribute("globalMsg", "Команда в боксе " + boxNumber + " обновлена");
 
 

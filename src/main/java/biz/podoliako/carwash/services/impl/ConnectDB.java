@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.naming.NoInitialContextException;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,7 +22,7 @@ public class ConnectDB implements ConnectionDB {
         Properties conProperties = new ConnectDB().getProperties();
 
         Connection con =
-                DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/CarWash?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF-8", conProperties);
+                DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/CarWash_Real?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF-8", conProperties);
         return con;
     }
 
@@ -33,15 +34,27 @@ public class ConnectDB implements ConnectionDB {
     }
 
     public static Connection getPoolConnection () throws NamingException, SQLException {
-        InitialContext initContext= new InitialContext();
-        DataSource ds = (DataSource) initContext.lookup("java:comp/env/jdbc/CarWash");
-        return ds.getConnection();
+        try {
+            InitialContext initContext= new InitialContext();
+            DataSource ds = (DataSource) initContext.lookup("java:comp/env/jdbc/CarWash");
+            return ds.getConnection();
+        }catch (NoInitialContextException exception) {
+            System.out.println("WARNING: the TomCat connection pool was not used. You are working only with one connection");
+            return getOneConnection();
+        }
     }
 
     @Override
     public Connection getConnection() throws NamingException, SQLException {
-        InitialContext initContext= new InitialContext();
-        DataSource ds = (DataSource) initContext.lookup("java:comp/env/jdbc/CarWash");
-        return ds.getConnection();
+        try {
+            InitialContext initContext= new InitialContext();
+            DataSource ds = (DataSource) initContext.lookup("java:comp/env/jdbc/CarWash");
+            return ds.getConnection();
+        }catch (NoInitialContextException exception) {
+            System.out.println("WARNING: the TomCat connection pool was not used. You are working only with one connection");
+            return getOneConnection();
+        }
+
+
     }
 }

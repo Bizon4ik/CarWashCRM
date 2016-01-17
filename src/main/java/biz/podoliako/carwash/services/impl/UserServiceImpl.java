@@ -2,9 +2,10 @@ package biz.podoliako.carwash.services.impl;
 
 
 import biz.podoliako.carwash.dao.DaoFactory;
+import biz.podoliako.carwash.models.pojo.UserExt;
 import biz.podoliako.carwash.services.CarWashService;
 import biz.podoliako.carwash.models.entity.*;
-import biz.podoliako.carwash.services.MD5;
+import biz.podoliako.carwash.services.utils.MD5;
 import biz.podoliako.carwash.services.UserService;
 import biz.podoliako.carwash.services.entity.AddUserForm;
 import biz.podoliako.carwash.view.AddUserFormView;
@@ -68,20 +69,20 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Map<CarWash, List<User>> getAllUsers(Integer ownerId) throws SQLException {
+    public Map<CarWash, List<UserExt>> getAllUsers(Integer ownerId) throws SQLException {
         List<CarWash> carWashList = carWashService.getAllCarWashes(ownerId);
-        Map<CarWash, List<User>> allUsers = new LinkedHashMap<>();
+        Map<CarWash, List<UserExt>> allUsers = new LinkedHashMap<>();
 
         for(CarWash carWash : carWashList) {
-            List<User> userList = getAllUserInCarWash(carWash.getId());
+            List<UserExt> userExtList = getAllUserInCarWash(carWash.getId());
 
-            allUsers.put(carWash, userList);
+            allUsers.put(carWash, userExtList);
         }
 
         return allUsers;
     }
 
-    public List<User> getAllUserInCarWash(Integer carWashid) throws SQLException {
+    public List<UserExt> getAllUserInCarWash(Integer carWashid) throws SQLException {
         return daoFactory.getUserDao().selectAllUserInCarWash(carWashid);
 
     }
@@ -105,7 +106,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Set<User> getAllWasherManInCarWash(Integer carWashId) {
+    public Set<UserExt> getAllWasherManInCarWash(Integer carWashId) {
         return daoFactory.getUserDao().selectAllWasherManInCarWash(carWashId);
 
     }

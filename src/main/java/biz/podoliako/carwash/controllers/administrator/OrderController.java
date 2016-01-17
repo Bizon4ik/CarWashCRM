@@ -2,9 +2,8 @@ package biz.podoliako.carwash.controllers.administrator;
 
 
 import biz.podoliako.carwash.models.entity.Car;
-import biz.podoliako.carwash.models.entity.CarBrand;
 import biz.podoliako.carwash.models.entity.Category;
-import biz.podoliako.carwash.models.entity.User;
+import biz.podoliako.carwash.models.pojo.UserExt;
 import biz.podoliako.carwash.services.CategoryService;
 import biz.podoliako.carwash.services.OrderService;
 import biz.podoliako.carwash.view.OrderForm;
@@ -40,10 +39,10 @@ public class OrderController {
     public String getCarNumberAndCategoryGET(HttpSession session,
                                              Model model){
 
-        User user = (User) session.getAttribute("CurrentCarWashUser");
+        UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
 
         try {
-            List<Category> categoryList = categoryService.selectAllCategory(user.getOwnerId());
+            List<Category> categoryList = categoryService.selectAllCategory(userExt.getOwnerId());
 
             model.addAttribute("car", new Car());
             model.addAttribute("categoryList", categoryList);
@@ -62,12 +61,12 @@ public class OrderController {
                                              RedirectAttributes redirectAttributes,
                                              Model model){
 
-        User user = (User) session.getAttribute("CurrentCarWashUser");
+        UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
         Integer carWashId = (Integer) session.getAttribute("ChoosenCarWashId");
 
         try {
             if (bindResult.hasErrors()){
-                List<Category> categoryList = categoryService.selectAllCategory(user.getOwnerId());
+                List<Category> categoryList = categoryService.selectAllCategory(userExt.getOwnerId());
                 model.addAttribute("categoryList", categoryList);
                 return "admin/order/carNumberAndCategory";
             }
@@ -77,8 +76,8 @@ public class OrderController {
             return "admin/main";
         }
         OrderForm orderForm = orderService.createBaseOrderForm(car);
-        orderForm.setUserId(user.getId());
-        orderForm.setOwnerId(user.getOwnerId());
+        orderForm.setUserId(userExt.getId());
+        orderForm.setOwnerId(userExt.getOwnerId());
         orderForm.setCarWashId(carWashId);
         session.setAttribute("orderForm", orderForm);
 
@@ -171,11 +170,11 @@ public class OrderController {
 
             OrderForm orderForm = orderService.createOrderFormForChanges(idOrder);
 
-            User user = (User) session.getAttribute("CurrentCarWashUser");
+            UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
             Integer carWashId = (Integer) session.getAttribute("ChoosenCarWashId");
 
-            orderForm.setUserId(user.getId());
-            orderForm.setOwnerId(user.getOwnerId());
+            orderForm.setUserId(userExt.getId());
+            orderForm.setOwnerId(userExt.getOwnerId());
             orderForm.setCarWashId(carWashId);
             session.setAttribute("orderForm", orderForm);
 

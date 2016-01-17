@@ -2,7 +2,7 @@ package biz.podoliako.carwash.controllers.owner;
 
 import biz.podoliako.carwash.models.entity.CarWash;
 
-import biz.podoliako.carwash.models.entity.User;
+import biz.podoliako.carwash.models.pojo.UserExt;
 import biz.podoliako.carwash.services.CarWashService;
 import biz.podoliako.carwash.services.StatisticService;
 import biz.podoliako.carwash.services.entity.CalendarPeriod;
@@ -38,12 +38,12 @@ public class OwnerStatisticController {
     public String choosePeriod(Model model,
                                HttpSession session) throws SQLException {
 
-        User user = (User) session.getAttribute("CurrentCarWashUser");
+        UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
 
         model.addAttribute("calendar", new Boolean(true));
         CalendarPeriod calendarPeriod = new CalendarPeriod();
         model.addAttribute("calendarPeriod", calendarPeriod);
-        List<CarWash> carWashList = carWashService.getAllCarWashes(user.getOwnerId());
+        List<CarWash> carWashList = carWashService.getAllCarWashes(userExt.getOwnerId());
         model.addAttribute("carWashList", carWashList);
 
         return "admin/statistic/choose_period";
@@ -57,8 +57,8 @@ public class OwnerStatisticController {
 
         if (bindResult.hasErrors()){
             model.addAttribute("calendar", new Boolean(true));
-            User user = (User) session.getAttribute("CurrentCarWashUser");
-            List<CarWash> carWashList = carWashService.getAllCarWashes(user.getOwnerId());
+            UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
+            List<CarWash> carWashList = carWashService.getAllCarWashes(userExt.getOwnerId());
             model.addAttribute("carWashList", carWashList);
             return "admin/statistic/choose_period";
         }

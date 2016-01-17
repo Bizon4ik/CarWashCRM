@@ -1,48 +1,65 @@
 package biz.podoliako.carwash.models.entity;
 
-
 import org.hibernate.validator.constraints.Length;
 
+import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
+@Entity
+@Table(name="users")
 public class User {
 
-    @Length(max=50, message = "Максимальная длина 50 символов")
+    @Id
+    @GeneratedValue
     private Integer id;
 
+    @Column(name="name")
     @Length(max=50, message = "Максимальная длина 50 символов")
     private String name;
 
+    @Column(name="surname")
     @Length(max=50, message = "Максимальная длина 50 символов")
     private String surname;
 
+    @Column(name="phoneNumber")
     @Length(max=50, message = "Максимальная длина 50 символов")
     private String phoneNumber;
 
-    private Set<Integer> carWashPermissionSet;
-
-    private UserCompensation compensation;
-
-    private String login = null;
-
+    @Column(name="role")
     private Role role;
 
+    @Column(name="salary")
+    private BigDecimal salary;
+
+    @Column(name="day_commission")
+    private Integer dayCommission;
+
+    @Column(name="night_commission")
+    private Integer nightCommission;
+
+    @Column(name="date_of_creation")
     private Date dateOfCreation;
 
+    @Column(name="date_of_delete")
     private Date dateOfDelete;
 
+    @Column(name="owner_id")
     private Integer ownerId;
 
+    @Column(name="created_by")
     private Integer createdBy;
 
-    public Integer getCreatedBy() {
-        return createdBy;
+    @OneToMany(mappedBy = "createdBy")
+    private Set<Client> clients = new HashSet<>();
+
+    public User() {
     }
 
-    public void setCreatedBy(Integer createdBy) {
-        this.createdBy = createdBy;
+    public User(Integer id){
+        this.id = id;
     }
 
     public Integer getId() {
@@ -85,6 +102,30 @@ public class User {
         this.role = role;
     }
 
+    public BigDecimal getSalary() {
+        return salary;
+    }
+
+    public void setSalary(BigDecimal salary) {
+        this.salary = salary;
+    }
+
+    public Integer getDayCommission() {
+        return dayCommission;
+    }
+
+    public void setDayCommission(Integer dayCommission) {
+        this.dayCommission = dayCommission;
+    }
+
+    public Integer getNightCommission() {
+        return nightCommission;
+    }
+
+    public void setNightCommission(Integer nightCommission) {
+        this.nightCommission = nightCommission;
+    }
+
     public Date getDateOfCreation() {
         return dateOfCreation;
     }
@@ -109,46 +150,20 @@ public class User {
         this.ownerId = ownerId;
     }
 
-    public Set<Integer> getCarWashPermissionSet() {
-        return carWashPermissionSet;
+    public Integer getCreatedBy() {
+        return createdBy;
     }
 
-    public void setCarWashPermissionSet(Set<Integer> carWashPermissionSet) {
-        this.carWashPermissionSet = carWashPermissionSet;
+    public void setCreatedBy(Integer createdBy) {
+        this.createdBy = createdBy;
     }
 
-    public UserCompensation getCompensation() {
-        return compensation;
+    public Set<Client> getClients() {
+        return clients;
     }
 
-    public void setCompensation(UserCompensation compensation) {
-        this.compensation = compensation;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", carWashPermissionSet=" + carWashPermissionSet +
-                ", compensation=" + compensation +
-                ", login='" + login + '\'' +
-                ", role=" + role +
-                ", dateOfCreation=" + dateOfCreation +
-                ", dateOfDelete=" + dateOfDelete +
-                ", ownerId=" + ownerId +
-                ", createdBy=" + createdBy +
-                '}';
+    public void setClients(Set<Client> clients) {
+        this.clients = clients;
     }
 
     @Override
@@ -158,13 +173,13 @@ public class User {
 
         User user = (User) o;
 
-        if (!id.equals(user.id)) return false;
+        if (id != null ? !id.equals(user.id) : user.id != null) return false;
+
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        return result;
+        return id != null ? id.hashCode() : 0;
     }
 }

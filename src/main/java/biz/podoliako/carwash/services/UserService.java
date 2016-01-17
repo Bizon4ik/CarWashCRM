@@ -1,7 +1,7 @@
 package biz.podoliako.carwash.services;
 
 import biz.podoliako.carwash.models.entity.CarWash;
-import biz.podoliako.carwash.models.entity.User;
+import biz.podoliako.carwash.models.pojo.UserExt;
 import biz.podoliako.carwash.models.entity.WasherManInBox;
 import biz.podoliako.carwash.services.entity.AddUserForm;
 import biz.podoliako.carwash.view.AddUserFormView;
@@ -24,13 +24,13 @@ public interface UserService {
 
     AddUserFormView getAddWasherManForm(Integer ownerid) throws SQLException;
 
-    Map<CarWash,List<User>> getAllUsers(Integer ownerId) throws SQLException;
+    Map<CarWash,List<UserExt>> getAllUsers(Integer ownerId) throws SQLException;
 
-    List<User> getAllUserInCarWash(Integer carWashid) throws SQLException;
+    List<UserExt> getAllUserInCarWash(Integer carWashid) throws SQLException;
 
     List<Set<WasherManInBoxWithName>> getWasherMansWorkingInBoxesNow(Integer carWashId) throws SQLException, NamingException;
 
-    Set<User> getAllWasherManInCarWash(Integer carWashId) throws SQLException, NamingException;
+    Set<UserExt> getAllWasherManInCarWash(Integer carWashId) throws SQLException, NamingException;
 
     void setWasherMansInBox(Integer washId, Integer boxNum, String[] washerManIds, Integer userIdHowSetWasherMan) throws SQLException, NamingException;
 

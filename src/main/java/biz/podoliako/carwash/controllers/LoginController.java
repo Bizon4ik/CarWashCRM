@@ -2,7 +2,7 @@ package biz.podoliako.carwash.controllers;
 
 import biz.podoliako.carwash.services.AuthorizationService;
 import biz.podoliako.carwash.models.entity.Role;
-import biz.podoliako.carwash.models.entity.User;
+import biz.podoliako.carwash.models.pojo.UserExt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 
@@ -32,20 +31,20 @@ public class LoginController {
                                   Model model) throws SQLException {
         String result = "";
 
-        User user = authorizationService.getUser(login, password);
+        UserExt userExt = authorizationService.getUser(login, password);
 
-        if (user == null) {
+        if (userExt == null) {
             model.addAttribute("incorrectLogin", "Неверное имя пользователя и/или пароль");
             result = "/login";
 
-        }else if(user.getRole() == Role.owner){
-            authorizationService.setUserSession(user, session);
+        }else if(userExt.getRole() == Role.owner){
+            authorizationService.setUserSession(userExt, session);
             result = "redirect:/owner/main";
-        }else if(user.getRole() == Role.administrator) {
-            authorizationService.setUserSession(user, session);
+        }else if(userExt.getRole() == Role.administrator) {
+            authorizationService.setUserSession(userExt, session);
 
-            if (user.getCarWashPermissionSet().size() == 1) {
-                authorizationService.setChoosenCarWashSession(user.getCarWashPermissionSet().iterator().next(), session);
+            if (userExt.getCarWashPermissionSet().size() == 1) {
+                authorizationService.setChoosenCarWashSession(userExt.getCarWashPermissionSet().iterator().next(), session);
             }else {
                 System.out.println("Administrator has permission for several CarWashes");
             }

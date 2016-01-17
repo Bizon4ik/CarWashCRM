@@ -4,13 +4,12 @@ package biz.podoliako.carwash.controllers.owner;
 import biz.podoliako.carwash.models.entity.CarWash;
 import biz.podoliako.carwash.services.CarWashService;
 import biz.podoliako.carwash.models.entity.Role;
-import biz.podoliako.carwash.models.entity.User;
+import biz.podoliako.carwash.models.pojo.UserExt;
 import biz.podoliako.carwash.services.UserService;
 import biz.podoliako.carwash.services.entity.AddAuthorizedUserForm;
 import biz.podoliako.carwash.services.entity.AddUserForm;
 import biz.podoliako.carwash.view.AddUserFormView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.*;
@@ -38,7 +37,7 @@ public class UserController {
     UserService userService;
 
     @RequestMapping(value = "/addAdmin", method = RequestMethod.GET)
-    public String addAdminGet (@ModelAttribute("CurrentCarWashUser") User authorization,
+    public String addAdminGet (@ModelAttribute("CurrentCarWashUser") UserExt authorization,
                            Model model){
 
         try {
@@ -60,22 +59,22 @@ public class UserController {
                               RedirectAttributes redirectAttributes,
                               Model model) {
 
-        User user = (User) session.getAttribute("CurrentCarWashUser");
+        UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
 
-        addUserForm.setOwnerId(user.getOwnerId());
+        addUserForm.setOwnerId(userExt.getOwnerId());
         model.addAttribute("addUserForm", addUserForm);
 
        try {
 
             if (bindResult.hasErrors()) {
-                AddUserFormView addAdminForm = userService.getAddAdminForm(user.getOwnerId());
+                AddUserFormView addAdminForm = userService.getAddAdminForm(userExt.getOwnerId());
                 model.addAttribute("addUserFormView", addAdminForm);
 
                 return "owner/user/addUser";
             }
 
             addUserForm.setRole(Role.administrator);
-            addUserForm.setCreatedBy(user.getId());
+            addUserForm.setCreatedBy(userExt.getId());
             userService.addUser(addUserForm);
             redirectAttributes.addFlashAttribute("globalMsg", "Пользователь " + addUserForm.getName() + " успешно создан");
 
@@ -87,7 +86,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/addWasherMan", method = RequestMethod.GET)
-    public String addWasherManGet (@ModelAttribute("CurrentCarWashUser") User authorization,
+    public String addWasherManGet (@ModelAttribute("CurrentCarWashUser") UserExt authorization,
                               Model model){
 
         try {
@@ -108,20 +107,20 @@ public class UserController {
                                HttpSession session,
                                RedirectAttributes redirectAttributes,
                                Model model) {
-        User user = (User) session.getAttribute("CurrentCarWashUser");
+        UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
 
-        addUserForm.setOwnerId(user.getOwnerId());
+        addUserForm.setOwnerId(userExt.getOwnerId());
         model.addAttribute("addUserForm", addUserForm);
 
         try {
             if (bindResult.hasErrors()) {
-                AddUserFormView addAdminForm = userService.getAddWasherManForm(user.getOwnerId());
+                AddUserFormView addAdminForm = userService.getAddWasherManForm(userExt.getOwnerId());
                 model.addAttribute("addUserFormView", addAdminForm);
 
                 return "owner/user/addUser";
             }
             addUserForm.setRole(Role.washerMan);
-            addUserForm.setCreatedBy(user.getId());
+            addUserForm.setCreatedBy(userExt.getId());
             userService.addUser(addUserForm);
 
             redirectAttributes.addFlashAttribute("globalMsg", "Мойщик " + addUserForm.getName() + " успешно создан");
@@ -137,10 +136,10 @@ public class UserController {
     public String allUsersGet (HttpSession session,
                                    Model model){
 
-        User user = (User) session.getAttribute("CurrentCarWashUser");
+        UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
 
         try {
-            Map<CarWash, List<User>>  list = userService.getAllUsers(user.getOwnerId());
+            Map<CarWash, List<UserExt>>  list = userService.getAllUsers(userExt.getOwnerId());
 
             model.addAttribute("allUsers", list);
         }catch (Exception e) {

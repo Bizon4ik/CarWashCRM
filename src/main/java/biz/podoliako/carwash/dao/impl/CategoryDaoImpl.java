@@ -2,8 +2,6 @@ package biz.podoliako.carwash.dao.impl;
 
 import biz.podoliako.carwash.dao.CategoryDao;
 import biz.podoliako.carwash.models.entity.Category;
-import biz.podoliako.carwash.models.entity.Role;
-import biz.podoliako.carwash.models.entity.User;
 import biz.podoliako.carwash.services.ConnectionDB;
 import biz.podoliako.carwash.services.exeption.NamingRuntimeException;
 import biz.podoliako.carwash.services.exeption.SQLRuntimeException;
@@ -16,9 +14,7 @@ import org.springframework.stereotype.Component;
 import javax.naming.NamingException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 @Component("CategoryDao")
 @Scope(BeanDefinition.SCOPE_SINGLETON)

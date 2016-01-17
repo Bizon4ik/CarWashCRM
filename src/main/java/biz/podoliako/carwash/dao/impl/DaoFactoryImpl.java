@@ -27,6 +27,7 @@ public class DaoFactoryImpl implements DaoFactory {
     private OrderDao orderDao;
     private ClientCarDao clientCarDao;
     private StatisticDao statisticDao;
+    private ClientDao clientDao;
 
     @Autowired
     public DaoFactoryImpl(
@@ -37,7 +38,8 @@ public class DaoFactoryImpl implements DaoFactory {
                           CarBrandDao carBrandDao,
                           OrderDao orderDao,
                           ClientCarDao clientCarDao,
-                          StatisticDao statisticDao) {
+                          StatisticDao statisticDao,
+                          ClientDao clientDao) {
 
 
         this.carWashDao = carWashDao;
@@ -48,6 +50,7 @@ public class DaoFactoryImpl implements DaoFactory {
         this.orderDao = orderDao;
         this.clientCarDao = clientCarDao;
         this.statisticDao = statisticDao;
+        this.clientDao = clientDao;
     }
 
 
@@ -85,5 +88,10 @@ public class DaoFactoryImpl implements DaoFactory {
     @Override
     public StatisticDao getStatisticDao() {
         return statisticDao;
+    }
+
+    @Override
+    public ClientDao getClientDao() {
+        return clientDao;
     }
 }

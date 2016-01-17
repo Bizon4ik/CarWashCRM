@@ -2,6 +2,7 @@ package biz.podoliako.carwash.controllers.owner;
 
 
 import biz.podoliako.carwash.models.entity.*;
+import biz.podoliako.carwash.models.pojo.UserExt;
 import biz.podoliako.carwash.services.CarWashService;
 import biz.podoliako.carwash.services.CategoryService;
 import biz.podoliako.carwash.services.ServiceService;
@@ -16,7 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -51,18 +51,18 @@ public class ServiceController {
                                      Model model) {
 
 
-        User user = (User) session.getAttribute("CurrentCarWashUser");
+        UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
 
         try {
             if (bindResult.hasErrors() ) {
                 return "/owner/service/add";
             }
 
-            serviceName.setOwnerId(user.getOwnerId());
-            serviceName.setCreatedBy(user.getId());
+            serviceName.setOwnerId(userExt.getOwnerId());
+            serviceName.setCreatedBy(userExt.getId());
             serviceService.addServiceName(serviceName);
 
-            List<ServiceName> serviceNameList = serviceService.selectAllServiceName(user.getOwnerId());
+            List<ServiceName> serviceNameList = serviceService.selectAllServiceName(userExt.getOwnerId());
             model.addAttribute("serviceNameList", serviceNameList);
         }catch (Exception e) {
             model.addAttribute("globalError", e.getMessage());
@@ -73,7 +73,7 @@ public class ServiceController {
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public String allGet(@ModelAttribute("CurrentCarWashUser") User authorization,
+    public String allGet(@ModelAttribute("CurrentCarWashUser") UserExt authorization,
                          Model model){
         try {
 
@@ -88,7 +88,7 @@ public class ServiceController {
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public String deleteGet(@ModelAttribute("CurrentCarWashUser") User authorization,
+    public String deleteGet(@ModelAttribute("CurrentCarWashUser") UserExt authorization,
                              Model model){
         try {
 
@@ -105,7 +105,7 @@ public class ServiceController {
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public String deletePost(@ModelAttribute("CurrentCarWashUser") User authorization,
+    public String deletePost(@ModelAttribute("CurrentCarWashUser") UserExt authorization,
                              @RequestParam(value = "listIdService", defaultValue = "") String[] listIdService,
                              Model model){
 
@@ -127,7 +127,7 @@ public class ServiceController {
     }
 
     @RequestMapping(value = "/carwash/add", method = RequestMethod.GET)
-    public String addCarWashServiceGet(@ModelAttribute("CurrentCarWashUser") User authorization,
+    public String addCarWashServiceGet(@ModelAttribute("CurrentCarWashUser") UserExt authorization,
                                        Model model) {
 
         try {
@@ -145,7 +145,7 @@ public class ServiceController {
 
     @RequestMapping(value = "/carwash/add", method = RequestMethod.POST)
     public String addCarWashServicePost(@ModelAttribute("CarWashAddServiceForm") CarWashAddServiceForm form,
-                                        @ModelAttribute("CurrentCarWashUser") User authorization,
+                                        @ModelAttribute("CurrentCarWashUser") UserExt authorization,
                                         RedirectAttributes redirectAttributes,
                                         Model model) {
 
@@ -174,7 +174,7 @@ public class ServiceController {
     }
 
     @RequestMapping(value = "/carwash/all", method = RequestMethod.GET)
-    public String allCarWashServiceGet (@ModelAttribute("CurrentCarWashUser") User authorization,
+    public String allCarWashServiceGet (@ModelAttribute("CurrentCarWashUser") UserExt authorization,
                                     Model model){
 
         try {
@@ -190,7 +190,7 @@ public class ServiceController {
 
     @RequestMapping(value = "/carwash/all", method = RequestMethod.POST)
     public String allCarWashServicePost (@ModelAttribute("carWashId") String carWashId,
-                                         @ModelAttribute("CurrentCarWashUser") User authorization,
+                                         @ModelAttribute("CurrentCarWashUser") UserExt authorization,
                                          Model model) {
         try {
             Map<String, List<biz.podoliako.carwash.models.entity.CarWashService>> carWashServiceList = serviceService.selectAllCarWashServices(carWashId, authorization.getOwnerId());
@@ -208,7 +208,7 @@ public class ServiceController {
     }
 
     @RequestMapping(value = "/carwash/delete", method = RequestMethod.GET)
-    public String deleteCarWashServiceGet (@ModelAttribute("CurrentCarWashUser") User authorization,
+    public String deleteCarWashServiceGet (@ModelAttribute("CurrentCarWashUser") UserExt authorization,
                                         Model model){
 
         try {
@@ -224,7 +224,7 @@ public class ServiceController {
 
     @RequestMapping(value = "/carwash/delete/choose", method = RequestMethod.POST)
     public String deleteChooseCarWashServicePost (@ModelAttribute("carWashId") String carWashId,
-                                         @ModelAttribute("CurrentCarWashUser") User authorization,
+                                         @ModelAttribute("CurrentCarWashUser") UserExt authorization,
                                          Model model) {
 
         try {
@@ -246,7 +246,7 @@ public class ServiceController {
     @RequestMapping(value = "/carwash/delete", method = RequestMethod.POST)
     public String deleteCarWashServicePost (@ModelAttribute("carWashId") String carWashId,
                                             @ModelAttribute("listCarWashServiceNameId") String[] listCarWashServiceNameId,
-                                            @ModelAttribute("CurrentCarWashUser") User authorization,
+                                            @ModelAttribute("CurrentCarWashUser") UserExt authorization,
                                             Model model) {
 
         try {

@@ -2,11 +2,9 @@ package biz.podoliako.carwash.controllers.owner;
 
 import biz.podoliako.carwash.models.entity.CarWash;
 import biz.podoliako.carwash.services.CarWashService;
-import biz.podoliako.carwash.models.entity.User;
+import biz.podoliako.carwash.models.pojo.UserExt;
 import biz.podoliako.carwash.models.pojo.CarWashFormErrors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,10 +37,10 @@ public class CarWashController {
                           HttpSession session,
                           Model model)  {
 
-        User user = (User) session.getAttribute("CurrentCarWashUser");
+        UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
 
         try {
-            carWash.setOwnerId(user.getOwnerId());
+            carWash.setOwnerId(userExt.getOwnerId());
 
             carWashService.setShiftTime(carWash, startHours, startMin, finishHours, finishMin);
 
@@ -54,7 +52,7 @@ public class CarWashController {
 
             carWashService.addCarWash(carWash);
             model.addAttribute("globalMsg", "Мойка \"" + carWash.getName() + "\" создана");
-            List<CarWash> carWashList = carWashService.getAllCarWashes(user.getOwnerId());
+            List<CarWash> carWashList = carWashService.getAllCarWashes(userExt.getOwnerId());
             model.addAttribute("carWashList", carWashList);
         }catch (Exception e) {
             model.addAttribute("globalError", e.getMessage());
@@ -66,7 +64,7 @@ public class CarWashController {
     }
 
     @RequestMapping(value="/all", method = RequestMethod.GET)
-    public String allGet(@ModelAttribute("CurrentCarWashUser") User authorization,
+    public String allGet(@ModelAttribute("CurrentCarWashUser") UserExt authorization,
                          Model model) throws SQLException {
 
         List<CarWash> carWashList = carWashService.getAllCarWashes(authorization.getOwnerId());
@@ -77,7 +75,7 @@ public class CarWashController {
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public String deleteGet(@ModelAttribute("CurrentCarWashUser") User authorization,
+    public String deleteGet(@ModelAttribute("CurrentCarWashUser") UserExt authorization,
                             Model model)throws SQLException {
 
             model.addAttribute("delete", new Boolean(true));
@@ -89,7 +87,7 @@ public class CarWashController {
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public String deletePost(@RequestParam(value = "listIdCarWash", defaultValue = "") String[] listIdCarWash,
-                             @ModelAttribute("CurrentCarWashUser") User authorization,
+                             @ModelAttribute("CurrentCarWashUser") UserExt authorization,
                              Model model) throws SQLException {
 
         for(String id : listIdCarWash) {

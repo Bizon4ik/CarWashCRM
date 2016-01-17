@@ -1,7 +1,7 @@
 package biz.podoliako.carwash.controllers.administrator;
 
 
-import biz.podoliako.carwash.models.entity.User;
+import biz.podoliako.carwash.models.pojo.UserExt;
 import biz.podoliako.carwash.services.OrderService;
 import biz.podoliako.carwash.view.OrderInBox;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +41,9 @@ public class MainAdminPageController {
                              Model model){
 
         Integer carWashId = (Integer) session.getAttribute("ChoosenCarWashId");
-        User user = (User) session.getAttribute("CurrentCarWashUser");
+        UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
         try {
-            orderService.closeOrder(orderId, carWashId, user.getId());
+            orderService.closeOrder(orderId, carWashId, userExt.getId());
             redirectAttributes.addFlashAttribute("globalMsg", "Заказ №" + orderId.trim() + " закрыт успешко");
             return "redirect:/admin/main";
         }catch (NumberFormatException e) {
@@ -60,9 +60,9 @@ public class MainAdminPageController {
                              Model model){
 
         Integer carWashId = (Integer) session.getAttribute("ChoosenCarWashId");
-        User user = (User) session.getAttribute("CurrentCarWashUser");
+        UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
         try {
-            orderService.deleteOrder(orderId, carWashId, user.getId());
+            orderService.deleteOrder(orderId, carWashId, userExt.getId());
             redirectAttributes.addFlashAttribute("globalMsg", "Заказ №"+ orderId.trim() + " удален успешко");
             return "redirect:/admin/main";
         }catch (NumberFormatException e) {

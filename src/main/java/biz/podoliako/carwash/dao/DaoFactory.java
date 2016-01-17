@@ -10,6 +10,7 @@ public interface DaoFactory {
     public OrderDao getOrderDao();
     public ClientCarDao getClientCarDao();
     public StatisticDao getStatisticDao();
+    public ClientDao getClientDao();
 
 
 

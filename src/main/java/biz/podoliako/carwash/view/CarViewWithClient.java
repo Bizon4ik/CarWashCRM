@@ -1,6 +1,6 @@
 package biz.podoliako.carwash.view;
 
-import biz.podoliako.carwash.models.entity.Client;
+import biz.podoliako.carwash.models.pojo.Client;
 
 
 public class CarViewWithClient extends CarView {

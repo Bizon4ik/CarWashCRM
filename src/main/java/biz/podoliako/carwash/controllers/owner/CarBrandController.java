@@ -2,7 +2,7 @@ package biz.podoliako.carwash.controllers.owner;
 
 
 import biz.podoliako.carwash.models.entity.CarBrand;
-import biz.podoliako.carwash.models.entity.User;
+import biz.podoliako.carwash.models.pojo.UserExt;
 import biz.podoliako.carwash.services.CarBrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,9 +44,9 @@ public class CarBrandController {
             return  "owner/carbrand/addCarBrand";
         }
 
-        User user = (User) session.getAttribute("CurrentCarWashUser");
-        carBrand.setOwnerId(user.getOwnerId());
-        carBrand.setCreatedBy(user.getId());
+        UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
+        carBrand.setOwnerId(userExt.getOwnerId());
+        carBrand.setCreatedBy(userExt.getId());
 
         try {
             carBrandService.addCarBrad(carBrand);
@@ -62,10 +62,10 @@ public class CarBrandController {
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public String allCarBrandsPost(HttpSession session,
                                    Model model) {
-        User user = (User) session.getAttribute("CurrentCarWashUser");
+        UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
 
         try {
-            List<CarBrand> carBrandList = carBrandService.getAllCarBrands(user.getOwnerId());
+            List<CarBrand> carBrandList = carBrandService.getAllCarBrands(userExt.getOwnerId());
             model.addAttribute("carBrandList", carBrandList);
         } catch (SQLException e) {
             model.addAttribute("globalError", e.getMessage());

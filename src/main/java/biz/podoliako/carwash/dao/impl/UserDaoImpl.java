@@ -2,7 +2,7 @@ package biz.podoliako.carwash.dao.impl;
 
 import biz.podoliako.carwash.dao.UserDao;
 import biz.podoliako.carwash.models.entity.Role;
-import biz.podoliako.carwash.models.entity.User;
+import biz.podoliako.carwash.models.pojo.UserExt;
 import biz.podoliako.carwash.models.entity.UserCompensation;
 import biz.podoliako.carwash.models.entity.WasherManInBox;
 import biz.podoliako.carwash.services.ConnectionDB;
@@ -10,7 +10,6 @@ import biz.podoliako.carwash.services.entity.AddUserForm;
 import biz.podoliako.carwash.services.entity.WasherManInBoxWithRate;
 import biz.podoliako.carwash.services.exeption.NamingRuntimeException;
 import biz.podoliako.carwash.services.exeption.SQLRuntimeException;
-import biz.podoliako.carwash.services.impl.ConnectDB;
 import biz.podoliako.carwash.view.WasherManInBoxWithName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -44,8 +43,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getUserbyId(Integer id) throws SQLException {
-        User user = null;
+    public UserExt getUserbyId(Integer id) throws SQLException {
+        UserExt userExt = null;
 
         String query = "SELECT  u.id as id, " +
                                "u.name as name, " +
@@ -70,17 +69,17 @@ public class UserDaoImpl implements UserDao {
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()){
-            user = new User();
-            user.setId(rs.getInt("id"));
-            user.setName(rs.getString("name"));
-            user.setSurname(rs.getString("surname"));
-            user.setPhoneNumber(rs.getString("phoneNumber"));
-            user.setRole(Role.valueOf(rs.getString("role")));
-            user.setDateOfCreation(rs.getDate("date_of_creation"));
-            user.setDateOfDelete(rs.getDate("date_of_delete"));
-            user.setOwnerId(rs.getInt("owner_id"));
-            user.setCreatedBy(rs.getInt("created_by"));
-            user.setLogin(rs.getString("login"));
+            userExt = new UserExt();
+            userExt.setId(rs.getInt("id"));
+            userExt.setName(rs.getString("name"));
+            userExt.setSurname(rs.getString("surname"));
+            userExt.setPhoneNumber(rs.getString("phoneNumber"));
+            userExt.setRole(Role.valueOf(rs.getString("role")));
+            userExt.setDateOfCreation(rs.getDate("date_of_creation"));
+            userExt.setDateOfDelete(rs.getDate("date_of_delete"));
+            userExt.setOwnerId(rs.getInt("owner_id"));
+            userExt.setCreatedBy(rs.getInt("created_by"));
+            userExt.setLogin(rs.getString("login"));
 
             UserCompensation userCompensation = null;
 
@@ -93,13 +92,13 @@ public class UserDaoImpl implements UserDao {
                 userCompensation.setDayCommission(rs.getInt("day_commission"));
                 userCompensation.setNightCommission(rs.getInt("night_commission"));
             }
-            user.setCompensation(userCompensation);
-            user.setCarWashPermissionSet(getUserCarWashes(id));
+            userExt.setCompensation(userCompensation);
+            userExt.setCarWashPermissionSet(getUserCarWashes(id));
 
 
         }
 
-        return user;
+        return userExt;
     }
 
     private Set<Integer> getUserCarWashes(Integer usedId) throws SQLException {
@@ -118,7 +117,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User authorizeUser(String login, String password) {
+    public UserExt authorizeUser(String login, String password) {
         return null;
     }
 
@@ -158,7 +157,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> selectAllUserInCarWash(Integer carWashid) throws SQLException {
+    public List<UserExt> selectAllUserInCarWash(Integer carWashid) throws SQLException {
         String query = "SELECT  " +
                                 "u.id as id, " +
                                 "u.name as name, " +
@@ -182,23 +181,23 @@ public class UserDaoImpl implements UserDao {
 
         ResultSet rs = ps.executeQuery();
 
-        List<User> userList = new ArrayList<>();
+        List<UserExt> userExtList = new ArrayList<>();
 
         while (rs.next()) {
-            User user = new User();
-            user.setId(rs.getInt("id"));
-            user.setName(rs.getString("name"));
-            user.setSurname(rs.getString("surname"));
-            user.setPhoneNumber(rs.getString("phoneNumber"));
-            user.setRole(Role.valueOf(rs.getString("role")));
-            user.setDateOfCreation(rs.getDate("date_of_creation"));
-            user.setDateOfDelete(null);
-            user.setOwnerId(rs.getInt("owner_id"));
-            user.setCreatedBy(rs.getInt("created_by"));
-            userList.add(user);
+            UserExt userExt = new UserExt();
+            userExt.setId(rs.getInt("id"));
+            userExt.setName(rs.getString("name"));
+            userExt.setSurname(rs.getString("surname"));
+            userExt.setPhoneNumber(rs.getString("phoneNumber"));
+            userExt.setRole(Role.valueOf(rs.getString("role")));
+            userExt.setDateOfCreation(rs.getDate("date_of_creation"));
+            userExt.setDateOfDelete(null);
+            userExt.setOwnerId(rs.getInt("owner_id"));
+            userExt.setCreatedBy(rs.getInt("created_by"));
+            userExtList.add(userExt);
         }
 
-        return userList;
+        return userExtList;
     }
 
     @Override
@@ -218,10 +217,10 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Set<User> selectAllWasherManInCarWash(Integer carWashId) {
+    public Set<UserExt> selectAllWasherManInCarWash(Integer carWashId) {
         Connection connection = null;
         PreparedStatement ps = null;
-        Set<User> washermans = new LinkedHashSet<>();
+        Set<UserExt> washermans = new LinkedHashSet<>();
 
         try {
             connection = connectionDB.getConnection();
@@ -249,17 +248,17 @@ public class UserDaoImpl implements UserDao {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()){
-                User user = new User();
-                user.setId(rs.getInt("id"));
-                user.setName(rs.getString("name"));
-                user.setSurname(rs.getString("surname"));
-                user.setPhoneNumber(rs.getString("phoneNumber"));
-                user.setRole(Role.valueOf(rs.getString("role")));
-                user.setDateOfCreation(rs.getTimestamp("date_of_creation"));
-                user.setDateOfDelete(rs.getTimestamp("date_of_delete"));
-                user.setOwnerId(rs.getInt("owner_id"));
-                user.setCreatedBy(rs.getInt("created_by"));
-                washermans.add(user);
+                UserExt userExt = new UserExt();
+                userExt.setId(rs.getInt("id"));
+                userExt.setName(rs.getString("name"));
+                userExt.setSurname(rs.getString("surname"));
+                userExt.setPhoneNumber(rs.getString("phoneNumber"));
+                userExt.setRole(Role.valueOf(rs.getString("role")));
+                userExt.setDateOfCreation(rs.getTimestamp("date_of_creation"));
+                userExt.setDateOfDelete(rs.getTimestamp("date_of_delete"));
+                userExt.setOwnerId(rs.getInt("owner_id"));
+                userExt.setCreatedBy(rs.getInt("created_by"));
+                washermans.add(userExt);
 
             }
 
