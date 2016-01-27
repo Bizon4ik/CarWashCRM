@@ -1,4 +1,4 @@
-package dao;
+package biz.podoliako.carwash.scrapHeap;
 
 import org.h2.tools.DeleteDbFiles;
 

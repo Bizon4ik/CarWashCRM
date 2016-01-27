@@ -6,6 +6,8 @@ import biz.podoliako.carwash.models.entity.Category;
 import biz.podoliako.carwash.models.pojo.UserExt;
 import biz.podoliako.carwash.services.CategoryService;
 import biz.podoliako.carwash.services.OrderService;
+import biz.podoliako.carwash.services.exeption.GlobalRuntimeExeption;
+import biz.podoliako.carwash.services.utils.GeneralUtils;
 import biz.podoliako.carwash.view.OrderForm;
 import biz.podoliako.carwash.view.OrderFormData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,7 @@ public class OrderController {
 
     @RequestMapping(value = "/getCarNumber", method = RequestMethod.GET)
     public String getCarNumberAndCategoryGET(HttpSession session,
+                                             RedirectAttributes redirectAttributes,
                                              Model model){
 
         UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
@@ -49,6 +52,8 @@ public class OrderController {
         } catch (SQLException e) {
             model.addAttribute("globalError", e.getMessage());
             return "admin/main";
+        } catch (Exception e) {
+            throw new GlobalRuntimeExeption(GeneralUtils.stackTraceToString(e));
         }
 
         return "admin/order/carNumberAndCategory";

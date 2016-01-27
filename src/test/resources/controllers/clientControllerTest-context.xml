@@ -3,8 +3,16 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <import resource="classpath:spring-context.xml" />
 
-    <bean id="ClientService" name="ClientService" class="org.mockito.Mockito" factory-method="mock">
-        <constructor-arg value="biz.podoliako.carwash.services.ClientService"/>
-    </bean>
+    <beans profile="test">
+        <bean id="ConnectionDB" name="ConnectionDB" class="org.mockito.Mockito" factory-method="mock">
+            <constructor-arg value="biz.podoliako.carwash.services.impl.ConnectDB" />
+        </bean>
+
+       <bean id="ClientService" class="org.mockito.Mockito" factory-method="mock">
+            <constructor-arg value="biz.podoliako.carwash.services.impl.ClientServiceImpl"/>
+        </bean>
+    </beans>
+
 </beans>

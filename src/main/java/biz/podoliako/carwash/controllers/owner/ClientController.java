@@ -2,8 +2,9 @@ package biz.podoliako.carwash.controllers.owner;
 
 import biz.podoliako.carwash.models.entity.Client;
 import biz.podoliako.carwash.models.entity.User;
-import biz.podoliako.carwash.models.pojo.UserExt;
 import biz.podoliako.carwash.services.ClientService;
+import biz.podoliako.carwash.services.exeption.GlobalRuntimeExeption;
+import biz.podoliako.carwash.services.impl.ClientServiceImpl;
 import biz.podoliako.carwash.services.utils.GeneralUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,9 +52,8 @@ public class ClientController {
             redirectAttributes.addFlashAttribute("globalMsg", "Клиент + " + client.getName() + " создан успешно (#"+ id + ")");
             return "redirect:owner/client/all";
 
-        }catch (Throwable e){
-            redirectAttributes.addFlashAttribute("globalError", GeneralUtils.stackTraceToString(e));
-            return "redirect:/owner/main";
+        }catch (Exception e){
+            throw new GlobalRuntimeExeption(GeneralUtils.stackTraceToString(e));
         }
     }
 

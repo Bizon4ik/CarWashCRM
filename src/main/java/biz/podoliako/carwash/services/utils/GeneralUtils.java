@@ -10,6 +10,6 @@ public class GeneralUtils {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);
-        return sw.toString();
+        return "message = " + e.getMessage() + " \n " + sw.toString();
     }
 }

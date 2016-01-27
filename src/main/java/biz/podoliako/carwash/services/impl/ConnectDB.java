@@ -2,6 +2,7 @@ package biz.podoliako.carwash.services.impl;
 
 
 import biz.podoliako.carwash.services.ConnectionDB;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.naming.InitialContext;
@@ -14,6 +15,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 @Component
+@Profile("dev")
 public class ConnectDB implements ConnectionDB {
     private final String LOGIN = "carwash_core";
     private final String PASSWORD = "5700876";

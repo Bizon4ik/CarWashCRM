@@ -24,8 +24,8 @@ public class CategoryDaoImpl implements CategoryDao {
     private ConnectionDB connectionDB;
 
     @Autowired
-    public CategoryDaoImpl(ConnectDB connectDB) throws SQLException, NamingException {
-        this.conn = connectDB.getConnection();
+    public CategoryDaoImpl(ConnectionDB connectDB) throws SQLException, NamingException {
+       this.conn = connectDB.getConnection();
         this.connectionDB = connectDB;
     }
 

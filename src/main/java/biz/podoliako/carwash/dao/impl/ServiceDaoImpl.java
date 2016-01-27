@@ -6,6 +6,7 @@ import biz.podoliako.carwash.models.entity.CarWash;
 import biz.podoliako.carwash.models.entity.CarWashService;
 import biz.podoliako.carwash.models.entity.Category;
 import biz.podoliako.carwash.models.entity.ServiceName;
+import biz.podoliako.carwash.services.ConnectionDB;
 import biz.podoliako.carwash.services.impl.ConnectDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -24,8 +25,8 @@ public class ServiceDaoImpl implements ServiceDao{
     private Connection connection = null;
 
     @Autowired
-    public ServiceDaoImpl(ConnectDB connectDB) throws SQLException, NamingException {
-        this.connection = connectDB.getPoolConnection();
+    public ServiceDaoImpl(ConnectionDB connectDB) throws SQLException, NamingException {
+        this.connection = connectDB.getConnection();
     }
 
     public ServiceDaoImpl(Connection connection){

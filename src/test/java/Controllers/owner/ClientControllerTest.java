@@ -2,12 +2,14 @@ package Controllers.owner;
 
 
 import biz.podoliako.carwash.services.ClientService;
+import biz.podoliako.carwash.services.impl.ClientServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -24,7 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:spring-context.xml", "classpath:controllers/clientControllerTest-context.xml"})
+@ContextConfiguration(locations = {"classpath:controllers/clientControllerTest-context.xml"})
+@ActiveProfiles(profiles = "test")
 @WebAppConfiguration
 public class ClientControllerTest {
 
@@ -113,12 +116,11 @@ public class ClientControllerTest {
         .andExpect(status().isFound())
         .andExpect(view().name("redirect:owner/client/all"))
         .andExpect(redirectedUrl("owner/client/all"))
-        .andExpect(flash().attribute("globalMsg", "Клиент + " + name + " создан успешно"));
+        .andExpect(flash().attribute("globalMsg", "Клиент + " + name + " создан успешно (#"+ 0 + ")"));
 
         ArgumentCaptor<Client> clientArgumentCaptor = ArgumentCaptor.forClass(Client.class);
 
         verify(clientService, times(1)).saveClient(clientArgumentCaptor.capture());
-        verifyNoMoreInteractions(clientService);
     }
 
 }
