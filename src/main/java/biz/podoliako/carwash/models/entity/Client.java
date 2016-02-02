@@ -1,6 +1,7 @@
 package biz.podoliako.carwash.models.entity;
 
 
+import biz.podoliako.carwash.services.validation.ClientNameUnique;
 import biz.podoliako.carwash.services.validation.NotEmptyTrim;
 import org.hibernate.validator.constraints.Length;
 
@@ -19,6 +20,7 @@ public class Client {
     @Column(name="name", length = 50)
     @Length(max=50, message = "Максимальная длина 50 символов")
     @NotEmptyTrim
+    @ClientNameUnique
     private String name;
 
     @Column(name = "phone_number", length = 20)

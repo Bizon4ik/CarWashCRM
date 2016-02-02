@@ -40,6 +40,7 @@ public class ClientController {
                                  RedirectAttributes redirectAttributes,
                                  HttpSession session,
                                  Model model){
+
         try {
             if (bindingResult.hasErrors()){
                 return "owner/clients/add";
@@ -50,7 +51,7 @@ public class ClientController {
 
             Long id = clientService.saveClient(client);
             redirectAttributes.addFlashAttribute("globalMsg", "Клиент + " + client.getName() + " создан успешно (#"+ id + ")");
-            return "redirect:owner/client/all";
+            return "redirect:/owner/client/all";
 
         }catch (Exception e){
             throw new GlobalRuntimeExeption(GeneralUtils.stackTraceToString(e));

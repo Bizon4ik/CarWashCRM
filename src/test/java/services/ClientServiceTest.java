@@ -14,20 +14,24 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:services/ClientService/ClientServiceTest-config.xml"})
+@ContextConfiguration(locations = {"classpath:spring-context.xml"})
 @ActiveProfiles(profiles = "test")
 public class ClientServiceTest {
 
     @Autowired
     ClientService clientService;
 
-    @InjectMocks
+   /* @InjectMocks*/
     @Autowired
     ClientDao clientDaoMock;
 
@@ -37,14 +41,12 @@ public class ClientServiceTest {
     }
 
     @Test
-    public void getClientByNameTest(){
-        String name = "ivan";
+    public void daoTest(){
 
-        when(clientDaoMock.getClientByName(name)).thenReturn(null);
-        Client client = clientService.getClientByName(name);
 
-        assertNull(client);
     }
+
+
 
 
 }

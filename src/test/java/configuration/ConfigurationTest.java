@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring-context.xml"})
 @WebAppConfiguration
-@ActiveProfiles(profiles = "dev")
+@ActiveProfiles(profiles = "test")
 public class ConfigurationTest {
 
     @Autowired
