@@ -102,4 +102,10 @@
         <property name="entityManagerFactory" ref="entityManagerFactory" />
     </bean>
 
+    <beans profile="test">
+        <bean id="ConnectionDB" name="ConnectionDB" class="org.mockito.Mockito" factory-method="mock">
+            <constructor-arg value="biz.podoliako.carwash.services.impl.ConnectDB" />
+        </bean>
+    </beans>
+
 </beans>
