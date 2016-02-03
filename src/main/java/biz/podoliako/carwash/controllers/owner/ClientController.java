@@ -41,7 +41,7 @@ public class ClientController {
                                  HttpSession session,
                                  Model model){
 
-        try {
+        /*try {*/
             if (bindingResult.hasErrors()){
                 return "owner/clients/add";
             }
@@ -53,9 +53,10 @@ public class ClientController {
             redirectAttributes.addFlashAttribute("globalMsg", "Клиент + " + client.getName() + " создан успешно (#"+ id + ")");
             return "redirect:/owner/client/all";
 
-        }catch (Exception e){
+        /*}catch (Exception e){
+            System.out.println("message = " +  e.getMessage());
             throw new GlobalRuntimeExeption(GeneralUtils.stackTraceToString(e));
-        }
+        }*/
     }
 
     private Client setIntoClientDateOfCretationAndCreatedBy(Client client, User user){

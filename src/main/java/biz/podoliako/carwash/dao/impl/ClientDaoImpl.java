@@ -10,10 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.*;
 import java.util.List;
 
 @Repository("ClientDao")
@@ -42,7 +39,7 @@ public class ClientDaoImpl implements ClientDao{
             Query q =  em.createQuery("SELECT c FROM Client as c WHERE c.name=:name", Client.class);
             q.setParameter("name", name);
             return (Client) q.getSingleResult();
-        }catch (NoResultException e){
+        }catch (NoResultException | NonUniqueResultException e){
             return null;
         }
 
