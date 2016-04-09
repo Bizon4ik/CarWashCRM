@@ -1,15 +1,50 @@
 package biz.podoliako.carwash.models.entity;
 
+
+import biz.podoliako.carwash.services.validation.CategoryNameUnique;
+import biz.podoliako.carwash.services.validation.NotEmptyTrim;
+import org.hibernate.validator.constraints.Length;
+
+import javax.persistence.*;
 import java.util.Date;
 
+@Entity
+@Table(name="Categories")
 public class Category {
-    private Integer id;
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(name="name", length = 100)
+    @Length(max=100, message = "Максимальная длина 100 символов")
+    @NotEmptyTrim
     private String name;
+
+    @Column(name="description", length = 200)
+    @Length(max=200, message = "Максимальная длина 200 символов")
+    @NotEmptyTrim
     private String description;
-    private Integer ownerId;
+
+    @Column(name = "date_of_creation")
     private Date dateOfCreation;
 
+    @Column(name = "date_of_delete")
+    private  Date dateOfDelete;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="created_by")
+    private User createdBy;
+
     public Category() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -17,7 +52,7 @@ public class Category {
     }
 
     public void setName(String name) {
-        this.name = name.trim().toLowerCase();
+        this.name = name;
     }
 
     public String getDescription() {
@@ -25,15 +60,7 @@ public class Category {
     }
 
     public void setDescription(String description) {
-        this.description = description.trim();
-    }
-
-    public Integer getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(Integer ownerId) {
-        this.ownerId = ownerId;
+        this.description = description;
     }
 
     public Date getDateOfCreation() {
@@ -44,12 +71,20 @@ public class Category {
         this.dateOfCreation = dateOfCreation;
     }
 
-    public Integer getId() {
-        return id;
+    public Date getDateOfDelete() {
+        return dateOfDelete;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setDateOfDelete(Date dateOfDelete) {
+        this.dateOfDelete = dateOfDelete;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 
     @Override
@@ -59,24 +94,25 @@ public class Category {
 
         Category category = (Category) o;
 
+        if (createdBy != null ? !createdBy.equals(category.createdBy) : category.createdBy != null) return false;
         if (dateOfCreation != null ? !dateOfCreation.equals(category.dateOfCreation) : category.dateOfCreation != null)
+            return false;
+        if (dateOfDelete != null ? !dateOfDelete.equals(category.dateOfDelete) : category.dateOfDelete != null)
             return false;
         if (description != null ? !description.equals(category.description) : category.description != null)
             return false;
-        if (id != null ? !id.equals(category.id) : category.id != null) return false;
         if (name != null ? !name.equals(category.name) : category.name != null) return false;
-        if (ownerId != null ? !ownerId.equals(category.ownerId) : category.ownerId != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
+        int result = name != null ? name.hashCode() : 0;
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (ownerId != null ? ownerId.hashCode() : 0);
         result = 31 * result + (dateOfCreation != null ? dateOfCreation.hashCode() : 0);
+        result = 31 * result + (dateOfDelete != null ? dateOfDelete.hashCode() : 0);
+        result = 31 * result + (createdBy != null ? createdBy.hashCode() : 0);
         return result;
     }
 
@@ -86,8 +122,9 @@ public class Category {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", ownerId=" + ownerId +
                 ", dateOfCreation=" + dateOfCreation +
+                ", dateOfDelete=" + dateOfDelete +
+                ", createdBy=" + createdBy +
                 '}';
     }
 }

@@ -6,6 +6,7 @@ import biz.podoliako.carwash.models.entity.CarBrand;
 import biz.podoliako.carwash.services.CarBrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.Date;
@@ -18,18 +19,19 @@ public class CarBrandServiceImpl implements CarBrandService{
     private DaoFactory daoFactory;
 
     @Override
+    @Transactional
     public void addCarBrad(CarBrand carBrand) throws SQLException {
         carBrand.setName(carBrand.getName().trim().toLowerCase());
-        carBrand.setDateOfcreation(new Date());
+        carBrand.setDateOfCreation(new Date());
 
-        daoFactory.getCarBrandDao().addCarBrand(carBrand);
+        daoFactory.getCarBrandDao().persist(carBrand);
 
     }
 
     @Override
-    public boolean isCarBrandExist(String name) throws SQLException {
+    public CarBrand isCarBrandExist(String name) throws SQLException {
 
-        return daoFactory.getCarBrandDao().isCarBrandExist(name.trim().toLowerCase());
+        return daoFactory.getCarBrandDao().findByName(name.trim().toLowerCase());
     }
 
     @Override

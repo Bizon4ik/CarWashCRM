@@ -16,7 +16,7 @@ public class OrderForm {
     @NotEmptyTrim
     private String carNumber;
 
-    private Integer categoryId;
+    private Long categoryId;
 
 
     @NotNegative(message = "Бренд не выбран")
@@ -50,11 +50,11 @@ public class OrderForm {
         this.carNumber = carNumber;
     }
 
-    public Integer getCategoryId() {
+    public Long getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(Integer categoryId) {
+    public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
 

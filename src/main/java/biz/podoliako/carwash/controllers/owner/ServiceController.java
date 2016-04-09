@@ -2,6 +2,7 @@ package biz.podoliako.carwash.controllers.owner;
 
 
 import biz.podoliako.carwash.models.entity.*;
+import biz.podoliako.carwash.models.entity.Category;
 import biz.podoliako.carwash.models.pojo.UserExt;
 import biz.podoliako.carwash.services.CarWashService;
 import biz.podoliako.carwash.services.CategoryService;

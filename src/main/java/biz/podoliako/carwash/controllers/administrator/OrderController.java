@@ -3,6 +3,7 @@ package biz.podoliako.carwash.controllers.administrator;
 
 import biz.podoliako.carwash.models.entity.Car;
 import biz.podoliako.carwash.models.entity.Category;
+import biz.podoliako.carwash.models.entity.User;
 import biz.podoliako.carwash.models.pojo.UserExt;
 import biz.podoliako.carwash.services.CategoryService;
 import biz.podoliako.carwash.services.OrderService;
@@ -42,10 +43,10 @@ public class OrderController {
                                              RedirectAttributes redirectAttributes,
                                              Model model){
 
-        UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
+        User currentUser = (User) session.getAttribute("CurrentCarWashUser");
 
         try {
-            List<Category> categoryList = categoryService.selectAllCategory(userExt.getOwnerId());
+            List<Category> categoryList = categoryService.selectAllCategory(currentUser.getOwnerId());
 
             model.addAttribute("car", new Car());
             model.addAttribute("categoryList", categoryList);

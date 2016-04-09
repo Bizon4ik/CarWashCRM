@@ -29,6 +29,7 @@ public class User {
     private String phoneNumber;
 
     @Column(name="role")
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Column(name="salary")
@@ -181,5 +182,24 @@ public class User {
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", role=" + role +
+                ", salary=" + salary +
+                ", dayCommission=" + dayCommission +
+                ", nightCommission=" + nightCommission +
+                ", dateOfCreation=" + dateOfCreation +
+                ", dateOfDelete=" + dateOfDelete +
+                ", ownerId=" + ownerId +
+                ", createdBy=" + createdBy +
+                ", clients=" + clients +
+                '}';
     }
 }

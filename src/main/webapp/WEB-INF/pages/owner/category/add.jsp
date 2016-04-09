@@ -1,49 +1,48 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <jsp:include page="../owner_header.jsp" />
+
+<c:choose>
+  <c:when test="${title == 'update'}">
+    <c:set var="showTitle" value="Обновить категорию #${category.id}"/>
+    <c:set var="formPath" value="/owner/category/update/${category.id}"/>
+  </c:when>
+  <c:otherwise>
+    <c:set var="showTitle" value="Добавить категорию:"/>
+    <c:set var="formPath" value="/owner/category/add"/>
+  </c:otherwise>
+</c:choose>
 
 
 <div class="container-fluid" id="body">
 
   <div class="row">
     <div class="col-xs-12 col-md-10 col-md-offset-1">
-      <p class="userTitle">Добавить категорию: </p>
+      <p class="userTitle">${showTitle}</p>
     </div>
   </div>
 
   <div class="row">
     <div class="col-xs-12 col-md-10 col-md-offset-1" >
-      <form class="form-horizontal" action="/owner/category/add" method="post">
+      <form:form method="post" action="${formPath}" cssClass="form-horizontal" commandName="category">
+
         <div class="form-group">
-          <label for="categoryName" class="col-xs-4 col-md-offset-1 col-md-2 col-lg-offset-1 col-lg-2">Название<sup>*</sup>:</label>
+          <label for="name" class="col-xs-4 col-md-offset-1 col-md-2 col-lg-offset-1 col-lg-2">Название<sup>*</sup>:</label>
           <div class="col-xs-8 col-md-5 col-lg-4">
-            <input type="text" class="form-control" id="categoryName" name="name" value="${category.name}" placeholder="Название категории">
+            <form:input path="name" id="name" cssClass="form-control" placeholder="Название категории" value="${category.name}"/>
+            <form:errors path="name" cssClass="errorMessage"/>
           </div>
         </div>
 
-        <c:if test="${categoryFormErrors.nameErrorMsg != null}">
-          <div class="form-group">
-            <div class="col-xs-12 col-md-offset-1 col-md-7 col-lg-offset-1 col-lg-6 errorMessage">
-              <p>${categoryFormErrors.nameErrorMsg}</p>
-            </div>
-          </div>
-        </c:if>
-
         <div class="form-group">
-          <label for="categoryDescription" class="col-xs-4 col-md-offset-1 col-md-2 col-lg-offset-1 col-lg-2">Описание<sup>*</sup>:</label>
+          <label for="description" class="col-xs-4 col-md-offset-1 col-md-2 col-lg-offset-1 col-lg-2">Описание<sup>*</sup>:</label>
           <div class="col-xs-8 col-md-5 col-lg-4">
-            <input type="text" class="form-control" id="categoryDescription" name="description" value="${category.description}" placeholder="Описание категории">
+            <form:input path="description" id="description" cssClass="form-control" placeholder="Описание категории" value="${category.description}"/>
+            <form:errors path="description" cssClass="errorMessage"/>
           </div>
         </div>
-
-        <c:if test="${categoryFormErrors.descriptionErrorMsg != null}">
-          <div class="form-group">
-            <div class="col-xs-12 col-md-offset-1 col-md-7 col-lg-offset-1 col-lg-6 errorMessage">
-              <p>${categoryFormErrors.descriptionErrorMsg}</p>
-            </div>
-          </div>
-        </c:if>
 
         <div class="form-group">
           <div class="col-xs-12 col-md-offset-1 col-md-7 col-lg-offset-1 col-lg-6">
@@ -56,7 +55,10 @@
             <button type="submit" class="btn btn-primary">Добавить</button>
           </div>
         </div>
-      </form>
+
+      </form:form>
+
+
     </div>
   </div>
 

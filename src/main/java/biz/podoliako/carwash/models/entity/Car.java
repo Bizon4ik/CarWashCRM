@@ -12,7 +12,7 @@ public class Car {
     @CarNumber
     private String number;
 
-    private Integer categoryId;
+    private Long categoryId;
 
     private Integer brandId;
 
@@ -28,11 +28,11 @@ public class Car {
         this.number = number;
     }
 
-    public Integer getCategoryId() {
+    public Long getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(Integer categoryId) {
+    public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
 

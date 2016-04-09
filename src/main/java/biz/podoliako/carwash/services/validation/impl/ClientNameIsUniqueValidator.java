@@ -3,6 +3,7 @@ package biz.podoliako.carwash.services.validation.impl;
 
 import biz.podoliako.carwash.dao.ClientDao;
 import biz.podoliako.carwash.models.entity.Client;
+import biz.podoliako.carwash.services.ClientService;
 import biz.podoliako.carwash.services.validation.ClientNameUnique;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,7 @@ import javax.validation.ConstraintValidatorContext;
 public class ClientNameIsUniqueValidator implements ConstraintValidator<ClientNameUnique, String> {
 
     @Autowired
-    ClientDao clientDao;
+    ClientService clientService;
 
     @Override
     public void initialize(ClientNameUnique clientNameUnique) {
@@ -29,7 +30,7 @@ public class ClientNameIsUniqueValidator implements ConstraintValidator<ClientNa
 
     @Override
     public boolean isValid(String name, ConstraintValidatorContext constraintValidatorContext) {
-        Client result = clientDao.getClientByName(name.toLowerCase().trim());
+        Client result = clientService.getClientByName(name);
 
         if ( result == null) {
             return true;

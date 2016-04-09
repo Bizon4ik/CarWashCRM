@@ -5,14 +5,6 @@
 
     <import resource="classpath:spring-context.xml" />
 
-    <beans profile="test">
-        <bean id="ConnectionDB" name="ConnectionDB" class="org.mockito.Mockito" factory-method="mock">
-            <constructor-arg value="biz.podoliako.carwash.services.impl.ConnectDB" />
-        </bean>
 
-       <bean id="ClientService" class="org.mockito.Mockito" factory-method="mock">
-            <constructor-arg value="biz.podoliako.carwash.services.impl.ClientServiceImpl"/>
-        </bean>
-    </beans>
 
 </beans>

@@ -1,7 +1,6 @@
 package biz.podoliako.carwash.services.impl;
 
 import biz.podoliako.carwash.dao.DaoFactory;
-import biz.podoliako.carwash.dao.ServiceDao;
 import biz.podoliako.carwash.models.entity.CarWash;
 import biz.podoliako.carwash.models.entity.CarWashService;
 import biz.podoliako.carwash.models.entity.Category;
@@ -41,7 +40,7 @@ public class ServiceServiceImpl implements ServiceService {
         CarWash carWash = new CarWash();
         carWash.setId(Integer.valueOf(form.getCarwashid()));
         Category category = new Category();
-        category.setId(Integer.valueOf(form.getCategoryid()));
+        category.setId(Long.valueOf(form.getCategoryid()));
 
         ArrayList<CarWashService> carWashServicesList = new ArrayList<CarWashService>();
 

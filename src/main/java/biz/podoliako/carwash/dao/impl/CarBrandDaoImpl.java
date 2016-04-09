@@ -5,11 +5,14 @@ import biz.podoliako.carwash.models.entity.CarBrand;
 import biz.podoliako.carwash.services.ConnectionDB;
 import biz.podoliako.carwash.services.exeption.NamingRuntimeException;
 import biz.podoliako.carwash.services.exeption.SQLRuntimeException;
-import biz.podoliako.carwash.services.impl.ConnectDB;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.persistence.NonUniqueResultException;
+import javax.persistence.Query;
 import org.springframework.stereotype.Component;
 
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,89 +23,20 @@ import java.util.List;
 @Component
 public class CarBrandDaoImpl implements CarBrandDao{
 
-   private ConnectionDB connectionDB;
+    private ConnectionDB connectionDB;
 
-    @Autowired
-    public CarBrandDaoImpl(ConnectionDB connectionDB) {
-        this.connectionDB = connectionDB;
-
-    }
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
-    public void addCarBrand(CarBrand carBrand) throws SQLException {
-        Connection connection = null;
-        PreparedStatement ps = null;
-
+    public CarBrand findByName(String name) throws SQLException {
         try {
-            connection = connectionDB.getConnection();
-
-            String query = "INSERT INTO " + CAR_BRAND_TABLE + "" +
-                    "(name, created_by, date_of_creation, date_of_delete, owner_id) VALUES " +
-                    "(?,       ?,             ?,              NULL,              ?   )";
-
-            ps = connection.prepareStatement(query);
-            ps.setString(1, carBrand.getName());
-            ps.setInt(2, carBrand.getCreatedBy());
-            ps.setObject(3, carBrand.getDateOfcreation());
-            ps.setInt(4, carBrand.getOwnerId());
-
-            ps.execute();
-
-        } catch (SQLException e) {
-            throw new SQLRuntimeException("SQL exception в методе addCarBrand (CarBrandDaoImpl) " + e);
-        } catch (NamingException e) {
-            throw new NamingRuntimeException("Naming exception в методе addCarBrand (CarBrandDaoImpl) " + e);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-
-                if (connection != null) {
-                    connection.close();
-                }
-            }catch (SQLException e) {
-                throw new SQLRuntimeException("SQL exception,  Cannot close connection or PreparedStatement, в методе addCarBrand (CarBrandDaoImpl) " + e);
-            }
+            Query q =  em.createQuery("SELECT c FROM CarBrand as c WHERE c.name=:name", CarBrand.class);
+            q.setParameter("name", name);
+            return (CarBrand) q.getSingleResult();
+        }catch (NonUniqueResultException e){
+            throw new NonUniqueResultException("В таблице Categories несколько пользователей с именем " + name);
         }
-
-    }
-
-    @Override
-    public boolean isCarBrandExist(String name) throws SQLException {
-        Connection connection = null;
-        PreparedStatement ps = null;
-
-        try {
-            connection = connectionDB.getConnection();
-
-            String query = "SELECT * FROM " + CAR_BRAND_TABLE + " WHERE  name = ?";
-
-            ps = connection.prepareStatement(query);
-            ps.setString(1, name);
-
-            ResultSet rs = ps.executeQuery();
-
-            return rs.next();
-
-        } catch (SQLException e) {
-            throw new SQLRuntimeException("SQL exception в методе isCarBrandExist (CarBrandDaoImpl) " + e);
-        } catch (NamingException e) {
-            throw new NamingRuntimeException("Naming exception в методе isCarBrandExist (CarBrandDaoImpl) " + e);
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-
-                if (connection != null) {
-                    connection.close();
-                }
-            }catch (SQLException e) {
-                throw new SQLRuntimeException("SQL exception,  Cannot close connection or PreparedStatement, в методе isCarBrandExist (CarBrandDaoImpl) " + e);
-            }
-        }
-
     }
 
     @Override
@@ -122,12 +56,10 @@ public class CarBrandDaoImpl implements CarBrandDao{
 
             while (rs.next()) {
                 CarBrand carBrand = new CarBrand();
-                carBrand.setId(rs.getInt("id"));
+                carBrand.setId(rs.getLong("id"));
                 carBrand.setName(rs.getString("name"));
-                carBrand.setCreatedBy(rs.getInt("created_by"));
-                carBrand.setDateOfcreation(rs.getTimestamp("date_of_creation"));
-                carBrand.setDateOfdelete(null);
-                carBrand.setOwnerId(rs.getInt("owner_id"));
+                carBrand.setDateOfCreation(rs.getTimestamp("date_of_creation"));
+                carBrand.setDateOfDelete(null);
 
                 carBrands.add(carBrand);
             }
@@ -172,12 +104,10 @@ public class CarBrandDaoImpl implements CarBrandDao{
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()){
-                carBrand.setId(rs.getInt("id"));
+                carBrand.setId(rs.getLong("id"));
                 carBrand.setName(rs.getString("name"));
-                carBrand.setCreatedBy(rs.getInt("created_by"));
-                carBrand.setDateOfcreation(rs.getTimestamp("date_of_creation"));
-                carBrand.setDateOfdelete(rs.getTimestamp("date_of_delete"));
-                carBrand.setOwnerId(rs.getInt("owner_id"));
+                carBrand.setDateOfCreation(rs.getTimestamp("date_of_creation"));
+                carBrand.setDateOfDelete(rs.getTimestamp("date_of_delete"));
             }
             return carBrand;
 
@@ -199,6 +129,37 @@ public class CarBrandDaoImpl implements CarBrandDao{
                 throw new SQLRuntimeException("SQL exception,  Cannot close connection or PreparedStatement, в методе selectBrandById (CarBrandDaoImpl) " + e);
             }
         }
+
+    }
+
+    @Override
+    public CarBrand persist(CarBrand carBrand) {
+        em.persist(carBrand);
+        return carBrand;
+    }
+
+    @Override
+    public CarBrand find(Long id) {
+        return null;
+    }
+
+    @Override
+    public List<CarBrand> findAll() {
+        return null;
+    }
+
+    @Override
+    public List<CarBrand> findAllIncludingDeleted() {
+        return null;
+    }
+
+    @Override
+    public CarBrand update(CarBrand entity) {
+        return null;
+    }
+
+    @Override
+    public void remove(CarBrand entity) {
 
     }
 }

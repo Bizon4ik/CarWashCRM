@@ -1,7 +1,6 @@
 package biz.podoliako.carwash.view;
 
 
-import biz.podoliako.carwash.models.PaymentMethod;
 import biz.podoliako.carwash.models.entity.CarBrand;
 import biz.podoliako.carwash.models.entity.CarWashService;
 import biz.podoliako.carwash.models.entity.Category;

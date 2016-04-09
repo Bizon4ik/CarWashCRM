@@ -10,7 +10,7 @@ public interface CarBrandService {
 
     void  addCarBrad(CarBrand carBrand) throws SQLException;
 
-    boolean  isCarBrandExist(String name) throws SQLException;
+    CarBrand  isCarBrandExist(String name) throws SQLException;
 
 
     List<CarBrand> getAllCarBrands(Integer ownerId) throws SQLException;

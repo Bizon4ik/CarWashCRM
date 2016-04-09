@@ -2,8 +2,11 @@ package biz.podoliako.carwash.controllers.owner;
 
 
 import biz.podoliako.carwash.models.entity.CarBrand;
+import biz.podoliako.carwash.models.entity.User;
 import biz.podoliako.carwash.models.pojo.UserExt;
 import biz.podoliako.carwash.services.CarBrandService;
+import biz.podoliako.carwash.services.exeption.GlobalRuntimeExeption;
+import biz.podoliako.carwash.services.utils.GeneralUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,36 +30,32 @@ public class CarBrandController {
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String addCarBrandGet(Model model){
-
-        model.addAttribute("carBrand", new CarBrand());
-
-        return  "owner/carbrand/addCarBrand";
+        try {
+            model.addAttribute("carBrand", new CarBrand());
+            return  "owner/carbrand/add";
+        }catch (Exception e){
+            System.out.println("message = " + e.getMessage());
+            throw new GlobalRuntimeExeption(GeneralUtils.stackTraceToString(e));
+        }
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String addCarBrandPost(@Valid @ModelAttribute("carBrand") CarBrand carBrand,
                                   BindingResult bindingResult,
                                   RedirectAttributes redirectAttributes,
-                                  HttpSession session,
-                                  Model model){
-
-        if (bindingResult.hasErrors()){
-            return  "owner/carbrand/addCarBrand";
-        }
-
-        UserExt userExt = (UserExt) session.getAttribute("CurrentCarWashUser");
-        carBrand.setOwnerId(userExt.getOwnerId());
-        carBrand.setCreatedBy(userExt.getId());
-
+                                  HttpSession session){
         try {
+            if (bindingResult.hasErrors()){
+                return  "owner/carbrand/add";
+            }
+            carBrand.setCreatedBy((User) session.getAttribute("CurrentCarWashUser"));
             carBrandService.addCarBrad(carBrand);
             redirectAttributes.addFlashAttribute("globalMsg", "АвтоБренд "+ carBrand.getName().trim().toUpperCase() +" добавлен");
-        } catch (SQLException e) {
-            model.addAttribute("globalError", e.getMessage());
+            return "redirect:/owner/carbrand/all";
+        } catch (Exception e){
+            System.out.println("message = " + e.getMessage());
+            throw new GlobalRuntimeExeption(GeneralUtils.stackTraceToString(e));
         }
-
-
-        return "redirect:/owner/carbrand/add";
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)

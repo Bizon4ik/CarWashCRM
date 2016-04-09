@@ -10,7 +10,7 @@
 
   <div class="row">
     <div class="col-xs-12 col-md-10 col-md-offset-1">
-      <p class="userTitle">Укажите номер машины и категорию: </p>
+      <p class="userTitle">Укажите основные данные клиента: </p>
     </div>
   </div>
 
@@ -36,6 +36,19 @@
             <form:errors path="categoryId" cssClass="errorMessage"></form:errors>
           </div>
         </div>
+
+        <div class="form-group">
+          <label for="category" class="col-xs-4 col-md-offset-1 col-md-2 col-lg-offset-1 col-lg-2">Клиента<sup>*</sup>:</label>
+          <div class="col-xs-8 col-md-5 col-lg-4">
+            <form:select size="1"  multiple="false" path="clientId" cssClass="form-control" id="client"  itemLabel="${car.categoryId}">
+              <c:forEach items="${categoryList}" var="category" varStatus="loop">
+                <form:option value="${category.id}"> ${category.name} - ${category.description}</form:option>
+              </c:forEach>
+            </form:select>
+            <form:errors path="categoryId" cssClass="errorMessage"></form:errors>
+          </div>
+        </div>
+
 
         <div class="form-group">
           <div class="col-xs-12 col-md-offset-1 col-md-7 col-lg-offset-1 col-lg-6">

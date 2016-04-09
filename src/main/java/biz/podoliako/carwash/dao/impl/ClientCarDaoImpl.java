@@ -39,7 +39,7 @@ public class ClientCarDaoImpl implements ClientCarDao{
 
             ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, car.getNumber());
-            ps.setInt(2, car.getCategoryId());
+            ps.setLong(2, car.getCategoryId());
             ps.setInt(3, car.getBrandId());
             ps.setObject(4, car.getClientId());
             ps.setBoolean(5, car.getIsFinal());
@@ -104,7 +104,7 @@ public class ClientCarDaoImpl implements ClientCarDao{
             while (rs.next()){
                 carViewWithClient.setId(rs.getInt("c_id"));
                 carViewWithClient.setNumber(rs.getString("car_number"));
-                carViewWithClient.setCategoryId(rs.getInt("category_id"));
+                carViewWithClient.setCategoryId(rs.getLong("category_id"));
                 carViewWithClient.setBrandId(rs.getInt("brand_id"));
                 carViewWithClient.setClientId(rs.getInt("client_id"));
                 carViewWithClient.setIsFinal(rs.getBoolean("is_final"));
@@ -157,7 +157,7 @@ public class ClientCarDaoImpl implements ClientCarDao{
             while (rs.next()){
                 car.setId(rs.getInt("id"));
                 car.setNumber(rs.getString("car_number"));
-                car.setCategoryId(rs.getInt("category_id"));
+                car.setCategoryId(rs.getLong("category_id"));
                 car.setBrandId(rs.getInt("brand_id"));
                 car.setClientId(rs.getInt("client_id"));
                 car.setIsFinal(rs.getBoolean("is_final"));

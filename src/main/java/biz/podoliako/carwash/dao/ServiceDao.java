@@ -29,7 +29,7 @@ public interface ServiceDao {
 
     boolean isServiceNameInCarWashExist(Integer carWashId, Integer categoryId, Integer serviceNameId) throws SQLException;
 
-    List<CarWashService> selectAllCarWashServiceByCategory(Integer categoryId, Integer carWashIdInt, Integer carWashOwnerId) throws SQLException;
+    List<CarWashService> selectAllCarWashServiceByCategory(Long categoryId, Integer carWashIdInt, Integer carWashOwnerId) throws SQLException;
 
     void deleteCarWashService(Date dateOfDelete, Integer serviceId, Integer carWashOwnerId) throws SQLException;
 

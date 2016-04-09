@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = CarBrandNotExistValidator.class)
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CarBrandNotExist {
+public @interface CarBrandNotExist_depricated {
     String message() default ("Автобред уже существует");
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

@@ -21,6 +21,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring-context.xml"})
@@ -62,6 +63,24 @@ public class ClientDaoTest {
     @Test
     @Transactional
     @Rollback(true)
+    public void getAllClientsAndOrderThemTest(){
+        Client client1 = createClient(2);
+        Client client2 = createClient(1);
+        clientDao.saveClient(client1);
+        clientDao.saveClient(client2);
+
+
+        List<Client> clientList = clientDao.getAllClientsOrdered();
+        assertEquals(2, clientList.size());
+        assertEquals(client2, clientList.get(0));
+        assertEquals(client1, clientList.get(1));
+
+    }
+
+
+    @Test
+    @Transactional
+    @Rollback(true)
     public void getClientByNameTest(){
         Client client = createClient(3);
         clientDao.saveClient(client);
@@ -72,6 +91,52 @@ public class ClientDaoTest {
         assertEquals(client, clientResult);
         assertEquals(null, clientResultNull);
     }
+
+    @Test
+    @Transactional
+    @Rollback(true)
+    public void findClient_Test(){
+        Client client = createClient(1);
+        client = clientDao.saveClient(client);
+
+        Client findClient = clientDao.find(client.getId());
+        System.out.println("user = " + findClient.getCreatedBy());
+        Client findNotExistClient = clientDao.find(new Long(0));
+        assertEquals(client, findClient);
+        assertNull(findNotExistClient);
+
+    }
+
+    @Test
+    @Transactional
+    @Rollback(true)
+    public void deleteClient_Test(){
+        Client client = createClient(1);
+        client = clientDao.saveClient(client);
+
+        clientDao.remove(client);
+
+        Client findClient = clientDao.find(client.getId());
+        assertNull(findClient);
+    }
+
+    @Test
+    @Transactional
+    @Rollback(true)
+    public void updateClient_Test(){
+        Client client = createClient(1);
+        client = clientDao.saveClient(client);
+
+        Client clientUpdate = createClient(2);
+        clientUpdate.setId(client.getId());
+
+        Client clientUpdated = clientDao.update(clientUpdate);
+
+        assertEquals(clientUpdate, clientUpdated);
+    }
+
+
+
 
     private Client createClient(Integer i){
         Client client = new Client();

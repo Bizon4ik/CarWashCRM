@@ -5,13 +5,16 @@ import biz.podoliako.carwash.models.entity.Category;
 import biz.podoliako.carwash.services.ConnectionDB;
 import biz.podoliako.carwash.services.exeption.NamingRuntimeException;
 import biz.podoliako.carwash.services.exeption.SQLRuntimeException;
-import biz.podoliako.carwash.services.impl.ConnectDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.persistence.NonUniqueResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +22,9 @@ import java.util.List;
 @Component("CategoryDao")
 @Scope(BeanDefinition.SCOPE_SINGLETON)
 public class CategoryDaoImpl implements CategoryDao {
+
+    @PersistenceContext
+    private EntityManager em;
 
     private Connection conn = null;
     private ConnectionDB connectionDB;
@@ -30,49 +36,7 @@ public class CategoryDaoImpl implements CategoryDao {
     }
 
     @Override
-    public void addCategory(Category category) throws SQLException {
-        String query = "INSERT INTO " + CATEGORY_TABLE_NAME +
-                       " (name, description, date_of_creation, owner_id) VALUES " +
-                       " (   ?,      ?,              ?,             ?  )"     ;
-
-        PreparedStatement preparedStatement = conn.prepareStatement(query);
-        preparedStatement.setString(1, category.getName());
-        preparedStatement.setString(2, category.getDescription());
-        preparedStatement.setObject(3, category.getDateOfCreation());
-        preparedStatement.setInt(4, category.getOwnerId());
-
-        preparedStatement.execute();
-    }
-
-    @Override
-    public void deleteCategory(Integer categoryId) throws SQLException {
-        String query = "DELETE FROM " + CATEGORY_TABLE_NAME + " WHERE id = ?";
-        PreparedStatement ps = conn.prepareStatement(query);
-        ps.setInt(1, categoryId);
-        ps.execute();
-    }
-
-    @Override
-    public void modifyCategory() {
-
-    }
-
-    @Override
-    public boolean isCategoryNameExist(String name) throws SQLException {
-        Boolean result = false;
-        String query = "SELECT * FROM " + CATEGORY_TABLE_NAME + " WHERE name = ?";
-
-        PreparedStatement ps = conn.prepareStatement(query);
-        ps.setString(1, name);
-        ResultSet rs = ps.executeQuery();
-
-        if (rs.next()) result = true;
-
-        return result;
-    }
-
-    @Override
-    public Category selectCategory(Integer categoryId) {
+    public Category selectCategory(Long categoryId) {
         Connection connection = null;
         PreparedStatement ps = null;
         Category category = new Category();
@@ -82,15 +46,15 @@ public class CategoryDaoImpl implements CategoryDao {
             String query = "SELECT * FROM " + CATEGORY_TABLE_NAME + " WHERE id = ?";
 
             ps = connection.prepareStatement(query);
-            ps.setInt(1, categoryId);
+            ps.setLong(1, categoryId);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()){
-                category.setId(rs.getInt("id"));
+                category.setId(rs.getLong("id"));
                 category.setName(rs.getString("name"));
                 category.setDescription(rs.getString("description"));
                 category.setDateOfCreation(rs.getTimestamp("date_of_creation"));
-                category.setOwnerId(rs.getInt("owner_id"));
+
             }
 
         } catch (SQLException e) {
@@ -125,14 +89,66 @@ public class CategoryDaoImpl implements CategoryDao {
         while (rs.next()) {
             Category category = new Category();
 
-            category.setId(rs.getInt("id"));
+            category.setId(rs.getLong("id"));
             category.setName(rs.getString("name"));
             category.setDescription(rs.getString("description"));
             category.setDateOfCreation(rs.getTimestamp("date_of_creation"));
-            category.setOwnerId(rs.getInt("owner_id"));
 
             categoryList.add(category);
         }
         return categoryList;
     }
+
+    @Override
+    public Category findByName(String name) {
+        try {
+            Query q =  em.createQuery("SELECT c FROM Category as c WHERE c.name=:name", Category.class);
+            q.setParameter("name", name);
+            return (Category) q.getSingleResult();
+        }catch (NonUniqueResultException e){
+            throw new NonUniqueResultException("В таблице Categories несколько пользователей с именем " + name);
+        }
+    }
+
+    @Override
+    public Category persist(Category category) {
+        em.persist(category);
+        return category;
+    }
+
+    @Override
+    public Category find(Long id) {
+        return em.find(Category.class, id);
+    }
+
+    @Override
+    public List<Category> findAll() {
+        return em.createQuery("SELECT c FROM  Category c WHERE c.dateOfDelete=NULL", Category.class)
+                                                                                                    .getResultList();
+    }
+
+    @Override
+    public List<Category> findAllIncludingDeleted() {
+        return em.createQuery("SELECT c FROM Category c", Category.class).getResultList();
+    }
+
+    @Override
+    public Category update(Category category) {
+        Category currentCategory = find(category.getId());
+                 currentCategory.setName(category.getName());
+                 currentCategory.setDescription(category.getDescription());
+                 currentCategory.setCreatedBy(category.getCreatedBy());
+                 currentCategory.setDateOfCreation(category.getDateOfCreation());
+                 currentCategory.setDateOfDelete(category.getDateOfDelete());
+
+        return  currentCategory;
+    }
+
+    @Override
+    public void remove(Category category) {
+        em.remove(em.contains(category) ? category : em.merge(category));
+
+    }
+
+
 }

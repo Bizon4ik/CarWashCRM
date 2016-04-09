@@ -14,9 +14,9 @@
 
   <div class="row">
 
-    <c:if test="${delete != null}">
+    <%--<c:if test="${delete != null}">
     <form action="/owner/category/delete" method="post">
-      </c:if>
+      </c:if>--%>
 
 
       <table class="table-bordered table-hover table-striped col-xs-12 table" >
@@ -26,10 +26,11 @@
           <th>Имя</th>
           <th>Описание</th>
           <th>Создана</th>
-          <th>id</th>
+          <th>Действия</th>
+         <%-- <th>id</th>
           <c:if test="${delete != null}">
             <th>Удалить</th>
-          </c:if>
+          </c:if>--%>
         </tr>
         </thead>
         <tbody>
@@ -42,10 +43,14 @@
             <td>
               <fmt:formatDate value="${row.dateOfCreation}" pattern="HH:mm dd-MM-yyyy" />
             </td>
-            <td>${row.id}</td>
+            <td>
+              <a href="/owner/category/delete/${row.id}"><input type="button" class="btn btn-danger defaultBtnSize" value="delete"></a>
+              <a href="/owner/category/update/${row.id}"><input type="button" class="btn btn-success defaultBtnSize" value="update"></a>
+            </td>
+            <%--<td>${row.id}</td>
             <c:if test="${delete != null}">
               <td><input type="checkbox" name="listIdCategory" value="${row.id}"/></td>
-            </c:if>
+            </c:if>--%>
 
           </tr>
 
@@ -54,10 +59,10 @@
 
       </table>
 
-      <c:if test="${delete != null}" >
+   <%--   <c:if test="${delete != null}" >
       <input type="submit" class="btn btn-danger col-xs-5 col-xs-offset-7 col-md-2 col-md-offset-10 deleteButton" value="delete">
     </form>
-    </c:if>
+    </c:if>--%>
 
   </div>
 

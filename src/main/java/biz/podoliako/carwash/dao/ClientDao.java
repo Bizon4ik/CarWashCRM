@@ -12,4 +12,12 @@ public interface ClientDao {
     Client getClientByName(String s);
 
     List<Client> getAllClients();
+
+    List<Client> getAllClientsOrdered();
+
+    void remove(Client client);
+
+    Client find(Long id);
+
+    Client update(Client client);
 }

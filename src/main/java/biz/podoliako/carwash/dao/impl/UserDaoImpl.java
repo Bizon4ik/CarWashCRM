@@ -2,6 +2,7 @@ package biz.podoliako.carwash.dao.impl;
 
 import biz.podoliako.carwash.dao.UserDao;
 import biz.podoliako.carwash.models.entity.Role;
+import biz.podoliako.carwash.models.entity.User;
 import biz.podoliako.carwash.models.pojo.UserExt;
 import biz.podoliako.carwash.models.entity.UserCompensation;
 import biz.podoliako.carwash.models.entity.WasherManInBox;
@@ -17,6 +18,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,6 +38,9 @@ public class UserDaoImpl implements UserDao {
     private Connection conn = null;
 
     private ConnectionDB connectionDB;
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Autowired
     public UserDaoImpl(ConnectionDB connectionDB) throws SQLException, NamingException {
@@ -99,6 +105,16 @@ public class UserDaoImpl implements UserDao {
         }
 
         return userExt;
+    }
+
+    public User find(Integer id){
+        return em.find(User.class, id);
+    }
+
+    @Override
+    public User persist(User user) {
+        em.persist(user);
+        return user;
     }
 
     private Set<Integer> getUserCarWashes(Integer usedId) throws SQLException {

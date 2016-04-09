@@ -120,7 +120,6 @@ public class Client {
 
         Client client = (Client) o;
 
-        if (id != null ? !id.equals(client.id) : client.id != null) return false;
         if (isPayByCash != null ? !isPayByCash.equals(client.isPayByCash) : client.isPayByCash != null) return false;
         if (name != null ? !name.equals(client.name) : client.name != null) return false;
         if (phoneNumber != null ? !phoneNumber.equals(client.phoneNumber) : client.phoneNumber != null) return false;

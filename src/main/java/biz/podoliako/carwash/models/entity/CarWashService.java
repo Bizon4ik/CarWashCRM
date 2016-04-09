@@ -1,5 +1,7 @@
 package biz.podoliako.carwash.models.entity;
 
+import biz.podoliako.carwash.models.entity.Category;
+
 import java.math.BigDecimal;
 import java.util.Date;
 

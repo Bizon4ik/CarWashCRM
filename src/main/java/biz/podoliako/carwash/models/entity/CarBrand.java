@@ -1,23 +1,33 @@
 package biz.podoliako.carwash.models.entity;
 
-import biz.podoliako.carwash.services.validation.CarBrandNotExist;
 import biz.podoliako.carwash.services.validation.NotEmptyTrim;
 import org.hibernate.validator.constraints.Length;
 
+import javax.persistence.*;
 import java.util.Date;
 
-
+@Entity
+@Table(name ="car_brands")
 public class CarBrand {
 
+    @Id
+    @GeneratedValue
+    private Long id;
+
     @NotEmptyTrim
+    @Column(length = 30)
     @Length(max = 30, message = "Не больше 30 символов")
-    @CarBrandNotExist
     private String name;
-    private Integer ownerId;
-    private Integer createdBy;
-    private Date dateOfcreation;
-    private Date dateOfdelete;
-    private Integer id;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="created_by")
+    private User createdBy;
+
+    @Column(name="date_of_creation")
+    private Date dateOfCreation;
+
+    @Column(name="date_of_delete")
+    private Date dateOfDelete;
 
     public String getName() {
         return name;
@@ -27,43 +37,35 @@ public class CarBrand {
         this.name = name;
     }
 
-    public Integer getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(Integer ownerId) {
-        this.ownerId = ownerId;
-    }
-
-    public Integer getCreatedBy() {
+    public User getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(Integer createdBy) {
+    public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
     }
 
-    public Date getDateOfcreation() {
-        return dateOfcreation;
+    public Date getDateOfCreation() {
+        return dateOfCreation;
     }
 
-    public void setDateOfcreation(Date dateOfcreation) {
-        this.dateOfcreation = dateOfcreation;
+    public void setDateOfCreation(Date dateOfCreation) {
+        this.dateOfCreation = dateOfCreation;
     }
 
-    public Date getDateOfdelete() {
-        return dateOfdelete;
+    public Date getDateOfDelete() {
+        return dateOfDelete;
     }
 
-    public void setDateOfdelete(Date dateOfdelete) {
-        this.dateOfdelete = dateOfdelete;
+    public void setDateOfDelete(Date dateOfDelete) {
+        this.dateOfDelete = dateOfDelete;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -71,11 +73,36 @@ public class CarBrand {
     public String toString() {
         return "CarBrand{" +
                 "name='" + name + '\'' +
-                ", ownerId=" + ownerId +
                 ", createdBy=" + createdBy +
-                ", dateOfcreation=" + dateOfcreation +
-                ", dateOfdelete=" + dateOfdelete +
+                ", dateOfCreation=" + dateOfCreation +
+                ", dateOfDelete=" + dateOfDelete +
                 ", id=" + id +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CarBrand carBrand = (CarBrand) o;
+
+        if (createdBy != null ? !createdBy.equals(carBrand.createdBy) : carBrand.createdBy != null) return false;
+        if (dateOfCreation != null ? !dateOfCreation.equals(carBrand.dateOfCreation) : carBrand.dateOfCreation != null)
+            return false;
+        if (dateOfDelete != null ? !dateOfDelete.equals(carBrand.dateOfDelete) : carBrand.dateOfDelete != null)
+            return false;
+        if (name != null ? !name.equals(carBrand.name) : carBrand.name != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (createdBy != null ? createdBy.hashCode() : 0);
+        result = 31 * result + (dateOfCreation != null ? dateOfCreation.hashCode() : 0);
+        result = 31 * result + (dateOfDelete != null ? dateOfDelete.hashCode() : 0);
+        return result;
     }
 }

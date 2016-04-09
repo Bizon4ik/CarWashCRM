@@ -5,18 +5,29 @@
 
 <jsp:include page="../owner_header.jsp" />
 
+<c:choose>
+  <c:when test="${title == 'update'}">
+    <c:set var="showTitle" value="Обновить клиента #${client.id}"/>
+    <c:set var="formPath" value="/owner/clients/update/${client.id}"/>
+  </c:when>
+  <c:otherwise>
+    <c:set var="showTitle" value="Добавить клиента:"/>
+    <c:set var="formPath" value="/owner/clients/add"/>
+  </c:otherwise>
+</c:choose>
+
 
 <div class="container-fluid" id="body">
 
   <div class="row">
     <div class="col-xs-12 col-md-10 col-md-offset-1">
-      <p class="userTitle">Добавить клиента: </p>
+      <p class="userTitle">${showTitle}</p>
     </div>
   </div>
 
   <div class="row">
     <div class="col-xs-12 col-md-10 col-md-offset-1" >
-      <form:form method="post" action="/owner/client/add" cssClass="form-horizontal" commandName="client">
+      <form:form method="post" action="${formPath}" cssClass="form-horizontal" commandName="client">
         <div class="form-group">
           <label for="name" class="col-xs-4 col-md-offset-1 col-md-2 col-lg-offset-1 col-lg-2">Название<sup>*</sup>:</label>
           <div class="col-xs-8 col-md-5 col-lg-4">
@@ -28,7 +39,7 @@
         <div class="form-group">
           <label for="phoneNumber" class="col-xs-4 col-md-offset-1 col-md-2 col-lg-offset-1 col-lg-2">№ телефона:</label>
           <div class="col-xs-8 col-md-5 col-lg-4">
-            <form:input path="phoneNumber" id="phoneNumber" cssClass="form-control" placeholder="Номер телефона" value="${client.phoneNumber}"></form:input>
+            <form:input path="phoneNumber" id="phoneNumber" cssClass="form-control" placeholder="Номер телефона" value="${client.phoneNumber}"/>
             <form:errors path="phoneNumber" cssClass="errorMessage"></form:errors>
           </div>
         </div>
@@ -65,7 +76,6 @@
             <button type="submit" class="btn btn-primary">&nbsp;&nbsp;Сохранить&nbsp;&nbsp;</button>
           </div>
         </div>
-
 
       </form:form>
     </div>

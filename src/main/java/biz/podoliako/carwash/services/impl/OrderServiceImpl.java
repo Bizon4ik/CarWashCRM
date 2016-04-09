@@ -5,6 +5,7 @@ package biz.podoliako.carwash.services.impl;
 import biz.podoliako.carwash.dao.DaoFactory;
 import biz.podoliako.carwash.models.PaymentMethod;
 import biz.podoliako.carwash.models.entity.*;
+import biz.podoliako.carwash.models.entity.Category;
 import biz.podoliako.carwash.services.OrderService;
 import biz.podoliako.carwash.services.entity.ServiceInOrder;
 import biz.podoliako.carwash.services.entity.WasherManInBoxWithRate;
@@ -146,7 +147,7 @@ public class OrderServiceImpl implements OrderService {
         OrderForm orderForm = new OrderForm();
             orderForm.setCarNumber(car.getNumber());
 
-            Integer categoryId = getCarCategoryId(car.getNumber());
+            Long categoryId = getCarCategoryId(car.getNumber());
             if (categoryId == null){
                 orderForm.setCategoryId(car.getCategoryId());
             }else {
@@ -166,7 +167,7 @@ public class OrderServiceImpl implements OrderService {
         return orderForm;
     }
 
-    private Integer getCarCategoryId(String number) {
+    private Long getCarCategoryId(String number) {
         Car car = daoFactory.getClientCarDao().selectCarByNumber(number);
         return car.getCategoryId();
 

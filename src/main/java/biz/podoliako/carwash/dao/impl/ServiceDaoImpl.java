@@ -7,7 +7,6 @@ import biz.podoliako.carwash.models.entity.CarWashService;
 import biz.podoliako.carwash.models.entity.Category;
 import biz.podoliako.carwash.models.entity.ServiceName;
 import biz.podoliako.carwash.services.ConnectionDB;
-import biz.podoliako.carwash.services.impl.ConnectDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
@@ -112,7 +111,7 @@ public class ServiceDaoImpl implements ServiceDao{
 
         PreparedStatement ps = connection.prepareStatement(query);
         ps.setInt(1, service.getCarWash().getId());
-        ps.setInt(2, service.getCategory().getId());
+        ps.setLong(2, service.getCategory().getId());
         ps.setInt(3, service.getServiceName().getId());
         ps.setBigDecimal(4, service.getPrice());
         ps.setInt(5, service.getCommisionDay());
@@ -140,7 +139,7 @@ public class ServiceDaoImpl implements ServiceDao{
     }
 
     @Override
-    public List<CarWashService> selectAllCarWashServiceByCategory(Integer categoryId, Integer carWashIdInt, Integer carWashOwnerId) throws SQLException {
+    public List<CarWashService> selectAllCarWashServiceByCategory(Long categoryId, Integer carWashIdInt, Integer carWashOwnerId) throws SQLException {
         List<CarWashService> carWashServiceList = new ArrayList<>();
 
         String query = "SELECT " +
@@ -187,7 +186,7 @@ public class ServiceDaoImpl implements ServiceDao{
                        "ORDER BY s.name";
 
         PreparedStatement ps = connection.prepareStatement(query);
-        ps.setInt(1, categoryId);
+        ps.setLong(1, categoryId);
         ps.setInt(2, carWashIdInt);
         ps.setInt(3, carWashOwnerId);
 
@@ -208,11 +207,11 @@ public class ServiceDaoImpl implements ServiceDao{
                 carWash.setFinishDayShift(rs.getTime("cwFinishShift"));
             carWashService.setCarWash(carWash);
                 Category category = new Category();
-                category.setId(rs.getInt("caId"));
+                category.setId(rs.getLong("caId"));
                 category.setName(rs.getString("caName"));
                 category.setDescription(rs.getString("caDescription"));
                 category.setDateOfCreation(rs.getTimestamp("caDateOfCreation"));
-                category.setOwnerId(rs.getInt("caOwnerId"));
+
             carWashService.setCategory(category);
                 ServiceName serviceName = new ServiceName();
                 serviceName.setId(rs.getInt("sId"));

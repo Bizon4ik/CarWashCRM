@@ -65,7 +65,6 @@
         <ul class="dropdown-menu" role="menu">
           <li><a href="/owner/category/add">Добавить категорию</a></li>
           <li><a href="/owner/category/all">Все категории</a></li>
-          <li><a href="/owner/category/delete">Удалить категории</a></li>
           <li role="separator" class="divider"></li>
           <li><a class="dropdown-right" href="/owner/carbrand/all">Все АвтоБренды</a></li>
           <li><a class="dropdown-right" href="/owner/carbrand/add">Добавить АвтоБренд</a></li>
@@ -76,11 +75,9 @@
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Клиенты<span class="caret"></span></a>
         <ul class="dropdown-menu" role="menu">
-          <li><a href="#">Все клиенты</a></li>
+          <li><a href="/owner/clients/all">Все клиенты</a></li>
           <li role="separator" class="divider"></li>
-          <li><a class="dropdown-right" href="/owner/client/add">Добавить клиента</a></li>
-          <li><a class="dropdown-right" href="#">Редактировать клиента</a></li>
-          <li><a class="dropdown-right" href="#">Удалить клиента</a></li>
+          <li><a class="dropdown-right" href="/owner/clients/add">Добавить клиента</a></li>
         </ul>
       </li>
 

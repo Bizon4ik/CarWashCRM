@@ -4,9 +4,9 @@ import biz.podoliako.carwash.dao.CategoryDao;
 import biz.podoliako.carwash.dao.DaoFactory;
 import biz.podoliako.carwash.models.entity.Category;
 import biz.podoliako.carwash.services.CategoryService;
-import biz.podoliako.carwash.models.pojo.CategoryFormErrors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.Date;
@@ -15,62 +15,72 @@ import java.util.List;
 @Component("CategoryModel")
 public class CategoryServiceImpl implements CategoryService {
 
-    private DaoFactory daoFactory;
+   @Autowired
+    CategoryDao categoryDao;
 
-    @Autowired
-    public CategoryServiceImpl(DaoFactory daoFactory) {
-        this.daoFactory = daoFactory;
-    }
 
     @Override
-    public void addCategory(Category category) throws SQLException {
-        category.setDateOfCreation(new Date());
-        daoFactory.getCategoryDao().addCategory(category);
+    @Transactional
+    public Category persist(Category category) {
+        category = prepareCategoryForPersist(category);
+        return categoryDao.persist(category);
+    }
 
+    private Category prepareCategoryForPersist(Category category) {
+        category.setName(category.getName().trim().toLowerCase());
+        category.setDescription(category.getDescription().trim().toLowerCase());
+        category.setDateOfCreation(new Date());
+
+        return category;
     }
 
     @Override
     public List<Category> selectAllCategory(Integer ownerId) throws SQLException {
-        return daoFactory.getCategoryDao().selectAllCategories(ownerId);
+        return null;
     }
 
     @Override
     public void deleteCategory(String id) throws SQLException {
-        Integer categoryId = Integer.valueOf(id);
-        daoFactory.getCategoryDao().deleteCategory(categoryId);
+        /* doNothing */
 
     }
 
     @Override
-    public void modifyCategory() {
-
+    @Transactional(readOnly = true)
+    public Category findByName(String name) {
+        name = name.trim().toLowerCase();
+        return categoryDao.findByName(name);
     }
 
     @Override
-    public CategoryFormErrors validateCategoryParam(Category category) throws SQLException {
-       CategoryFormErrors categoryFormErrors = new CategoryFormErrors();
-
-       categoryFormErrors.setNameErrorMsg(validateCategoryName(category.getName()));
-       categoryFormErrors.setDescriptionErrorMsg(validateCategoryDescription(category.getDescription()));
-
-      return  categoryFormErrors;
+    @Transactional(readOnly = true)
+    public List<Category> findAll() {
+        return categoryDao.findAll();
     }
 
-    private String validateCategoryDescription(String description) {
-        if (description == null) return "Укажите описание категории";
-        description = description.trim();
-        if (description.equals("")) return "Укажите описание категории";
-        if (description.length() > CategoryDao.DESCRIPTION_MAX_LENGTH) return "Слишком длинное описание";
-        return null;
+    @Override
+    public Category validateId(String idStr) {
+        Long id = new Long(idStr);
+        Category category = categoryDao.find(id);
+        if (category == null) {
+            throw new IllegalArgumentException("Категория с id " + id + " не существует");
+        }else {
+            return category;
+        }
     }
 
-    private String validateCategoryName(String name) throws SQLException {
-        if (name == null) return "Укажите название категории";
-        name = name.trim();
-        if (name.equals("")) return "Укажите название категории";
-        if (name.length() > CategoryDao.NAME_MAX_LENGTH) return "Слишком большое название";
-
-        if(daoFactory.getCategoryDao().isCategoryNameExist(name)) return "Категория с таким название уже есть";
-        return null;
+    @Override
+    @Transactional
+    public Category markDeleted(Category category) {
+        category.setDateOfDelete(new Date());
+        return categoryDao.update(category);
     }
+
+    @Override
+    @Transactional
+    public Category update(Category category) {
+        category = prepareCategoryForPersist(category);
+        return  categoryDao.update(category);
+    }
+
 }

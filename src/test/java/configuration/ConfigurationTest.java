@@ -9,6 +9,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import static org.junit.Assert.*;
 
 
@@ -18,12 +21,12 @@ import static org.junit.Assert.*;
 @ActiveProfiles(profiles = "test")
 public class ConfigurationTest {
 
-    @Autowired
-    SessionFactory sessionFactory;
+    @PersistenceContext
+    private EntityManager em;
 
     @Test
     public void IsSessionFactoryExist(){
-        assertNotEquals(null, sessionFactory);
+        assertNotEquals(null, em);
     }
 
 }

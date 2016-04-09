@@ -30,7 +30,7 @@
             <td class="col-xs-1">${loop.count}</td>
             <td class="col-xs-4"><span style="text-transform: uppercase">${row.name}</span></td>
             <td class="col-xs-3">
-              <fmt:formatDate value="${row.dateOfcreation}" pattern="dd-MM-yyyy" />
+              <fmt:formatDate value="${row.dateOfCreation}" pattern="dd-MM-yyyy" />
             </td>
           </tr>
 

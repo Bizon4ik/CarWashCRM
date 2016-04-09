@@ -1,5 +1,6 @@
 package biz.podoliako.carwash.dao;
 
+import biz.podoliako.carwash.models.entity.User;
 import biz.podoliako.carwash.models.pojo.UserExt;
 import biz.podoliako.carwash.models.entity.WasherManInBox;
 import biz.podoliako.carwash.services.entity.AddUserForm;
@@ -44,4 +45,10 @@ public interface UserDao  {
     void insertFinishTimeForWasherManInBox(Integer userId, Date date);
 
     Set<WasherManInBoxWithRate> selectAllWasherManInBoxWithRate(Integer washId, Integer boxNumber);
+
+    /*-------------------- Persistance --------------------------- */
+
+    public User find (Integer id);
+
+    User persist(User user);
 }
