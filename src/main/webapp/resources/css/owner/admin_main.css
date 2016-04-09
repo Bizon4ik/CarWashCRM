@@ -149,6 +149,10 @@ td .firstLetterUppercase {
 	width: inherit;
 }
 
+.defaultBtnSize {
+	font-size: 1em
+}
+
 @media (max-width: 1170px ) {
 	.dropdown a, .active a{
 		font-size: 2em;

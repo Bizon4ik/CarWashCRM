@@ -44,10 +44,6 @@
     <context:property-placeholder location="classpath*:local.properties"/>
 
     <bean id="myDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
-            <!--<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-            <property name="url" value="jdbc:mysql://127.0.0.1:3306/CarWash_Real"/>
-            <property name="username" value="carwash_core"/>
-            <property name="password" value="5700876"/>-->
             <property name="driverClassName" value="${database.driver}"/>
             <property name="url" value="${database.url}"/>
             <property name="username" value="${database.username}"/>
@@ -55,7 +51,7 @@
     </bean>
 
 
-   <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+<!--   <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="myDataSource"/>
         <property name="packagesToScan" >
             <list>
@@ -71,7 +67,7 @@
                 <prop key="connection.pool_size">1</prop>
             </props>
         </property>
-    </bean>
+    </bean>-->
 
     <bean id="entityManagerFactory"  class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="myDataSource"/>
@@ -85,18 +81,23 @@
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
                 <property name="generateDdl" value="true" />
                 <property name="showSql" value="true" />
+
             </bean>
         </property>
 
         <property name="jpaProperties">
             <props>
+                <prop key="javax.persistence.validation.mode">NONE</prop>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
                 <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="hibernate.connection.pool_size">5</prop>
             </props>
         </property>
+
     </bean>
+
+
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory" />
@@ -107,5 +108,7 @@
             <constructor-arg value="biz.podoliako.carwash.services.impl.ConnectDB" />
         </bean>
     </beans>
+
+
 
 </beans>
