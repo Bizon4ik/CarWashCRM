@@ -1,4 +1,4 @@
-package Controllers.owner;
+package сontrollers.owner;
 
 import biz.podoliako.carwash.controllers.owner.CarBrandController;
 import biz.podoliako.carwash.models.entity.CarBrand;

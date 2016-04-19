@@ -3,7 +3,7 @@
 <Resource name="jdbc/CarWash" auth="Container"
           type="javax.sql.DataSource" maxActive="100"
           maxIdle="30" maxWait="10000"
-          username="carwash_core"
+          username="Bizon4ik"
           password="5700876"
           driverClassName="com.mysql.jdbc.Driver"
           url="jdbc:mysql://127.0.0.1:3306/Test_CarWash"/>

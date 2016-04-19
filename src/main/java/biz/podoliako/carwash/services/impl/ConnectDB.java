@@ -17,7 +17,7 @@ import java.util.Properties;
 @Component
 @Profile("dev")
 public class ConnectDB implements ConnectionDB {
-    private final String LOGIN = "carwash_core";
+    private final String LOGIN = "Bizon4ik";
     private final String PASSWORD = "5700876";
 
     public static Connection getOneConnection() throws SQLException {

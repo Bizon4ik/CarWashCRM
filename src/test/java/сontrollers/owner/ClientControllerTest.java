@@ -1,4 +1,4 @@
-package Controllers.owner;
+package сontrollers.owner;
 
 
 import biz.podoliako.carwash.controllers.owner.ClientController;
